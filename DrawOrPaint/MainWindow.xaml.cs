@@ -48,7 +48,6 @@ namespace DrawOrPaint
         }
         Color buttonBackground = Color.FromRgb(System.Convert.ToByte(221), System.Convert.ToByte(221), System.Convert.ToByte(221));
 
-
         #region MouseHandlers
 
         private void SetMouseCursor()
@@ -431,6 +430,24 @@ namespace DrawOrPaint
         }
         #endregion
 
+        private void ZoomOutBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var st = new ScaleTransform();
+            st.ScaleX /= 1.1;
+            st.ScaleY /= 1.1;
+
+            main_canvas.RenderTransform = st;
+        }
+
+        private void ZoomInBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var st = new ScaleTransform();
+            st.ScaleX *= 1.1;
+            st.ScaleY *= 1.1;
+
+            main_canvas.RenderTransform = st;
+        }
+
         private void SaveDimensBtn_Click(object sender, RoutedEventArgs e)
         {
             if((canvasTool.drawType==DrawType.rectangle || canvasTool.drawType == DrawType.ellipse) && (HeightTextBox.Text !="" && WidthTextBox.Text!=""))
@@ -448,11 +465,12 @@ namespace DrawOrPaint
                     double height = 0;
                     Double.TryParse(WidthTextBox.Text.ToString(), out width);
                     Double.TryParse(HeightTextBox.Text.ToString(), out height);
+                    Canvas.SetTop(currentShape, 8);
+                    Canvas.SetLeft(currentShape, 8);
                     currentShape.Width = width;
                     currentShape.Height = height;
                     currentShape.Stroke = new SolidColorBrush(penColor);
                     currentShape.StrokeThickness = penThickness;
-
                     canvasTool.DrawShape(currentShape, false);
                     currentShape = null;
                 
