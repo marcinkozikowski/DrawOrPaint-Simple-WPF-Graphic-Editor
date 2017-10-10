@@ -1,0 +1,184 @@
+﻿<Window x:Class="DrawOrPaint.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DrawOrPaint"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="700" Width="800">
+
+    <Window.Resources>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Padding" Value="7"/>
+            <Setter Property="Margin" Value="3"/>
+        </Style>
+    </Window.Resources>
+
+
+    <Grid ShowGridLines="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Menu IsMainMenu="True" FontSize="16px" Height="auto" Grid.Row="0">
+            <MenuItem Header="_File">
+                <MenuItem Header="Nowy">
+                    <MenuItem.Icon>
+                        <Image Source="Icons/new-box.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Otwórz">
+                    <MenuItem.Icon>
+                        <Image Source="Icons/window-open.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Zapisz">
+                    <MenuItem.Icon>
+                        <Image Source="Icons/content-save.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="Wyjście">
+                    <MenuItem.Icon>
+                        <Image Source="Icons/exit-to-app.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+
+        <TabControl Grid.Row="1" Height="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+            <TabItem Header="Narzedzia">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <GroupBox Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="2" Header="Tools" Padding="5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            
+                            <Button Grid.Column="0" Grid.Row="0" Click="getShape" Name="ArrowBtn">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Icons/cursorIcon.png" MaxHeight="35"/>
+                                <TextBlock TextAlignment="Center" VerticalAlignment="Center">Cursor</TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button Grid.Column="1" Grid.Row="0" Click="getShape" Name="LineBtn">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Icons/lineIcon.png" MaxHeight="35"/>
+                                <TextBlock TextAlignment="Center" VerticalAlignment="Center">Line</TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button Grid.Column="0" Grid.Row="1" Name="RectangleBtn" Click="getShape">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Icons/rectangle.png" MaxHeight="35"/>
+                                <TextBlock TextAlignment="Center" VerticalAlignment="Center">Rectangle</TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button Grid.Column="1" Grid.Row="1" Name="CircleBtn" Click="getShape">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Icons/circleIcon.png" MaxHeight="35"/>
+                                <TextBlock TextAlignment="Center" VerticalAlignment="Center">Circle</TextBlock>
+                            </StackPanel>
+                        </Button>
+                            </Grid>
+                    </GroupBox>
+
+                    <GroupBox Grid.Column="2" Grid.RowSpan="2" Padding="5" Grid.ColumnSpan="3" Header="Shape Properties">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Label Name="HeightLabel" Content="Height" Grid.Column="0" Grid.Row="0" Margin="3"/>
+                            <Label Name="WidthLabel" Content="Width" Grid.Column="0" Grid.Row="1" Margin="3"/>
+                            <TextBox Name="HeightTextBox" Grid.Column="1" Grid.Row="0" Margin="3"/>
+                            <TextBox Name="WidthTextBox" Grid.Column="1" Grid.Row="1" Margin="3"/>
+                            <Button Grid.Column="2" Grid.Row="0" Name="SaveDimensBtn" Click="SaveDimensBtn_Click">
+                                <TextBlock>Save</TextBlock>
+                            </Button>
+                        </Grid>
+                    </GroupBox>
+                    
+                    
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Widok" Height="Auto">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Button Grid.Column="0" Grid.Row="0" >
+                        <TextBlock>Line</TextBlock>
+                    </Button>
+                    <Button Grid.Column="1" Grid.Row="0" >
+                        <TextBlock>Rectangle</TextBlock>
+                    </Button>
+                    <Button Grid.Column="2" Grid.Row="0" >
+                        <TextBlock>Circle</TextBlock>
+                    </Button>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <Canvas x:Name="main_canvas"  ClipToBounds="True" Grid.Row="2" Background="White" MouseLeftButtonDown="main_canvas_MouseLeftButtonDown" MouseMove="main_canvas_MouseMove" MouseLeftButtonUp="main_canvas_MouseLeftButtonUp" PreviewMouseLeftButtonDown="main_canvas_PreviewMouseLeftButtonDown">
+
+        </Canvas>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Currently Selected Tool: " FontWeight="Bold" Grid.Column="0"/>
+            <Label Content="null" Name="currentToolLabel" Grid.Column="1"/>
+            <Separator Grid.Column="2">
+                <Separator.LayoutTransform>
+                    <RotateTransform Angle="90" />
+                </Separator.LayoutTransform>
+            </Separator>
+            <Label Content="Currently Selected Item: " FontWeight="Bold" Grid.Column="3"/>
+            <Label Content="null" Name="currentShapeLabel" Grid.Column="4"/>
+        </Grid>
+    </Grid>
+
+
+
+
+</Window>
