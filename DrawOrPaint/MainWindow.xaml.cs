@@ -53,7 +53,7 @@ namespace DrawOrPaint
         private void SetMouseCursor()
         {
             // See what cursor we should display.
-            
+
             Cursor desired_cursor = Cursors.Arrow;
             switch (currentHitType)
             {
@@ -87,42 +87,12 @@ namespace DrawOrPaint
         // Return a HitType value to indicate what is at the point.
         private HitType SetHitType(Shape rect, Point point)
         {
-            if (selectedShape is Rectangle)
+            if (selectedShape is Rectangle || selectedShape is Ellipse)
             {
-                double left = Canvas.GetLeft((selectedShape as Rectangle));
-                double top = Canvas.GetTop((selectedShape as Rectangle));
-                double right = left + (selectedShape as Rectangle).Width;
-                double bottom = top + (selectedShape as Rectangle).Height;
-                if (point.X < left) return HitType.None;
-                if (point.X > right) return HitType.None;
-                if (point.Y < top) return HitType.None;
-                if (point.Y > bottom) return HitType.None;
-
-                const double GAP = 10;
-                if (point.X - left < GAP)
-                {
-                    // Left edge.
-                    if (point.Y - top < GAP) return HitType.UL;
-                    if (bottom - point.Y < GAP) return HitType.LL;
-                    return HitType.L;
-                }
-                if (right - point.X < GAP)
-                {
-                    // Right edge.
-                    if (point.Y - top < GAP) return HitType.UR;
-                    if (bottom - point.Y < GAP) return HitType.LR;
-                    return HitType.R;
-                }
-                if (point.Y - top < GAP) return HitType.T;
-                if (bottom - point.Y < GAP) return HitType.B;
-                return HitType.Body;
-            }
-            else if(selectedShape is Ellipse)
-            {
-                double left = Canvas.GetLeft((selectedShape as Ellipse));
-                double top = Canvas.GetTop((selectedShape as Ellipse));
-                double right = left + (selectedShape as Ellipse).Width;
-                double bottom = top + (selectedShape as Ellipse).Height;
+                double left = Canvas.GetLeft((selectedShape));
+                double top = Canvas.GetTop((selectedShape));
+                double right = left + (selectedShape).Width;
+                double bottom = top + (selectedShape).Height;
                 if (point.X < left) return HitType.None;
                 if (point.X > right) return HitType.None;
                 if (point.Y < top) return HitType.None;
@@ -157,31 +127,21 @@ namespace DrawOrPaint
                 double width = Math.Abs(right - left);
                 double height = Math.Abs(bottom - top);
 
-                if (point.X < left) return HitType.None;
-                if (point.X > right) return HitType.None;
-                if (point.Y < top) return HitType.None;
-                if (point.Y > bottom) return HitType.None;
+                if (point.X < Math.Min(left, right)) return HitType.None;
+                if (point.X > Math.Max(left, right)) return HitType.None;
+                if (point.Y < Math.Min(top,bottom)) return HitType.None;
+                if (point.Y > Math.Max(top, bottom)) return HitType.None;
 
-                const double GAP = 1;
-                if (point.X == left)
+                double cornerGap = 10;
+                if ((Math.Abs(point.X - left) < cornerGap) && (Math.Abs(point.Y - top) < cornerGap))
                 {
-                    // Left edge.
-                    if (point.Y - top < GAP) return HitType.UL;
-                    if (bottom - point.Y < GAP) return HitType.LL;
                     return HitType.L;
                 }
-                if (right == point.X)
+                if ((Math.Abs(point.X - right) < cornerGap) && (Math.Abs(point.Y - bottom) < cornerGap))
                 {
-                    // Right edge.
-                    if (point.Y - top < GAP) return HitType.UR;
-                    if (bottom - point.Y < GAP) return HitType.LR;
                     return HitType.R;
                 }
-                if (point.X >= Math.Min(left, right) && point.Y >= Math.Min(top, bottom))
-                {
-                    return HitType.Body;
-                }
-                return HitType.None;
+                return HitType.Body;
             }
             else return HitType.None;
         }
@@ -193,7 +153,7 @@ namespace DrawOrPaint
 
             if (selectedShape != null)
             {
-                if(selectedShape is Rectangle)
+                if (selectedShape is Rectangle)
                 {
                     currentHitType = SetHitType((Rectangle)selectedShape, Mouse.GetPosition(main_canvas));
                     SetMouseCursor();
@@ -202,7 +162,7 @@ namespace DrawOrPaint
                     LastPoint = Mouse.GetPosition(main_canvas);
                     dragInProgress = true;
                 }
-                else if(selectedShape is Ellipse)
+                else if (selectedShape is Ellipse)
                 {
                     currentHitType = SetHitType((Ellipse)selectedShape, Mouse.GetPosition(main_canvas));
                     SetMouseCursor();
@@ -211,7 +171,7 @@ namespace DrawOrPaint
                     LastPoint = Mouse.GetPosition(main_canvas);
                     dragInProgress = true;
                 }
-                else if(selectedShape is Line)
+                else if (selectedShape is Line)
                 {
                     currentHitType = SetHitType((Line)selectedShape, Mouse.GetPosition(main_canvas));
                     SetMouseCursor();
@@ -248,7 +208,7 @@ namespace DrawOrPaint
                     temp.Height = currentShape.Height;
                     Canvas.SetLeft(temp, currentShape.Margin.Left);
                     Canvas.SetTop(temp, currentShape.Margin.Top);
-                    canvasTool.DrawShape(temp,true);
+                    canvasTool.DrawShape(temp, true);
                 }
 
                 currentShape = null;
@@ -270,7 +230,7 @@ namespace DrawOrPaint
                 Canvas.SetLeft(line, currentLine.Margin.Left);
                 Canvas.SetTop(line, currentLine.Margin.Right);
 
-                canvasTool.DrawShape(line,true);
+                canvasTool.DrawShape(line, true);
             }
             currentLine = null;
         }
@@ -279,51 +239,32 @@ namespace DrawOrPaint
         {
             #region ChangePlace
 
-            if(dragInProgress==false && selectedShape != null)
+            if (dragInProgress == false && selectedShape != null)
             {
-                if (selectedShape is Rectangle)
-                {
-                    currentHitType = SetHitType((Rectangle)selectedShape, Mouse.GetPosition(main_canvas));
-                }
-                else if(selectedShape is Ellipse)
-                {
-                    currentHitType = SetHitType((Ellipse)selectedShape, Mouse.GetPosition(main_canvas));
-                }
-                else if (selectedShape is Line)
-                {
-                    currentHitType = SetHitType((Line)selectedShape, Mouse.GetPosition(main_canvas));
-                }
+                currentHitType = SetHitType(selectedShape, Mouse.GetPosition(main_canvas));
                 SetMouseCursor();
-            } 
-            else if(selectedShape !=null && dragInProgress==true)
+            }
+            else if (selectedShape != null && dragInProgress == true)
             {
-                // See how much the mouse has moved.
                 Point point = Mouse.GetPosition(main_canvas);
 
                 double offset_x = point.X - LastPoint.X;
                 double offset_y = point.Y - LastPoint.Y;
 
-                double new_x=0;
-                double new_y=0;
-                double new_width=0;
-                double new_height=0;
-                double new_x2=0;
-                double new_y2=0;
+                double new_x = 0;
+                double new_y = 0;
+                double new_width = 0;
+                double new_height = 0;
+                double new_x2 = 0;
+                double new_y2 = 0;
 
-                // Get the rectangle's current position.
-                if (selectedShape is Rectangle)
+                // Get the current position.
+                if (selectedShape is Rectangle || selectedShape is Ellipse)
                 {
-                    new_x = Canvas.GetLeft((Rectangle)selectedShape);
-                    new_y = Canvas.GetTop((Rectangle)selectedShape);
-                    new_width = (selectedShape as Rectangle).Width;
-                    new_height = (selectedShape as Rectangle).Height;
-                 }
-                else if (selectedShape is Ellipse)
-                {
-                    new_x = Canvas.GetLeft((Ellipse)selectedShape);
-                    new_y = Canvas.GetTop((Ellipse)selectedShape);
-                    new_width = (selectedShape as Ellipse).Width;
-                    new_height = (selectedShape as Ellipse).Height;
+                    new_x = Canvas.GetLeft(selectedShape);
+                    new_y = Canvas.GetTop(selectedShape);
+                    new_width =selectedShape.Width;
+                    new_height = selectedShape.Height;
                 }
                 else if (selectedShape is Line)
                 {
@@ -379,7 +320,7 @@ namespace DrawOrPaint
                             break;
                     }
                 }
-                else if(selectedShape is Line)
+                else if (selectedShape is Line)
                 {
                     switch (currentHitType)
                     {
@@ -389,65 +330,30 @@ namespace DrawOrPaint
                             new_x2 += offset_x;
                             new_y2 += offset_y;
                             break;
-                        //case HitType.UL:
-                        //    new_x += offset_x;
-                        //    new_y += offset_y;
-                        //    new_width -= offset_x;
-                        //    new_height -= offset_y;
-                        //    break;
-                        //case HitType.UR:
-                        //    new_y += offset_y;
-                        //    new_width += offset_x;
-                        //    new_height -= offset_y;
-                        //    break;
-                        //case HitType.LR:
-                        //    new_width += offset_x;
-                        //    new_height += offset_y;
-                        //    break;
-                        //case HitType.LL:
-                        //    new_x += offset_x;
-                        //    new_width -= offset_x;
-                        //    new_height += offset_y;
-                        //    break;
-                        //case HitType.L:
-                        //    new_x += offset_x;
-                        //    new_width -= offset_x;
-                        //    break;
-                        //case HitType.R:
-                        //    new_width += offset_x;
-                        //    break;
-                        //case HitType.B:
-                        //    new_height += offset_y;
-                        //    break;
-                        //case HitType.T:
-                        //    new_y += offset_y;
-                        //    new_height -= offset_y;
-                        //    break;
+                        case HitType.L:
+                            new_x += offset_x;
+                            new_y += offset_y;
+                            break;
+                        case HitType.R:
+                            new_x2 += offset_x;
+                            new_y2 += offset_y;
+                            break;
                     }
                 }
                 #endregion
 
-                // Don't use negative width or height.
                 if ((new_width > 0) && (new_height > 0))
                 {
-                    if(selectedShape is Rectangle)
+                    if (selectedShape is Rectangle || selectedShape is Ellipse)
                     {
-                        Canvas.SetLeft((Rectangle)selectedShape, new_x);
-                        Canvas.SetTop((Rectangle)selectedShape, new_y);
-                        (selectedShape as Rectangle).Width = new_width;
-                        (selectedShape as Rectangle).Height = new_height;
+                        Canvas.SetLeft(selectedShape, new_x);
+                        Canvas.SetTop(selectedShape, new_y);
+                        selectedShape.Width = new_width;
+                        selectedShape.Height = new_height;
                     }
-                    else if(selectedShape is Ellipse)
-                    {
-                        Canvas.SetLeft((Ellipse)selectedShape, new_x);
-                        Canvas.SetTop((Ellipse)selectedShape, new_y);
-                        (selectedShape as Ellipse).Width = new_width;
-                        (selectedShape as Ellipse).Height = new_height;
-                    }
-                    // Save the mouse's new location.
                     LastPoint = point;
                 }
-                if(selectedShape is Line)
+                if (selectedShape is Line)
                 {
                     (selectedShape as Line).X1 = new_x;
                     (selectedShape as Line).Y1 = new_y;
@@ -536,13 +442,13 @@ namespace DrawOrPaint
                 if (e.Source != main_canvas && e.Source.GetType() == typeof(Rectangle) || e.Source.GetType() == typeof(Ellipse) || e.Source.GetType() == typeof(Line))
                 {
                     if (e.Source is Rectangle)
-                        {
+                    {
                         currentShapeLabel.Content = "Rectangle";
                         HeightTextBox.Text = ((Rectangle)e.Source).Height.ToString();
                         WidthTextBox.Text = ((Rectangle)e.Source).Width.ToString();
                         selectedShape = (Rectangle)e.Source;
                     }
-                    else if(e.Source is Ellipse)
+                    else if (e.Source is Ellipse)
                     {
                         currentShapeLabel.Content = "Circle";
                         HeightTextBox.Text = ((Ellipse)e.Source).Height.ToString();
@@ -556,7 +462,6 @@ namespace DrawOrPaint
                         WidthTextBox.Text = ((Line)e.Source).Width.ToString();
                         selectedShape = e.Source as Line;
                     }
-
                 }
             }
         }
@@ -582,32 +487,32 @@ namespace DrawOrPaint
 
         private void SaveDimensBtn_Click(object sender, RoutedEventArgs e)
         {
-            if((canvasTool.drawType==DrawType.rectangle || canvasTool.drawType == DrawType.ellipse) && (HeightTextBox.Text !="" && WidthTextBox.Text!=""))
+            if ((canvasTool.drawType == DrawType.rectangle || canvasTool.drawType == DrawType.ellipse) && (HeightTextBox.Text != "" && WidthTextBox.Text != ""))
             {
-                if(canvasTool.drawType==DrawType.rectangle)
+                if (canvasTool.drawType == DrawType.rectangle)
                 {
                     currentShape = new Rectangle();
                 }
-                else if(canvasTool.drawType ==DrawType.ellipse)
+                else if (canvasTool.drawType == DrawType.ellipse)
                 {
                     currentShape = new Ellipse();
                 }
 
-                    double width = 0;
-                    double height = 0;
-                    Double.TryParse(WidthTextBox.Text.ToString(), out width);
-                    Double.TryParse(HeightTextBox.Text.ToString(), out height);
-                    Canvas.SetTop(currentShape, 8);
-                    Canvas.SetLeft(currentShape, 8);
-                    currentShape.Width = width;
-                    currentShape.Height = height;
-                    currentShape.Stroke = new SolidColorBrush(penColor);
-                    currentShape.StrokeThickness = penThickness;
-                    canvasTool.DrawShape(currentShape, false);
-                    currentShape = null;
-                
+                double width = 0;
+                double height = 0;
+                Double.TryParse(WidthTextBox.Text.ToString(), out width);
+                Double.TryParse(HeightTextBox.Text.ToString(), out height);
+                Canvas.SetTop(currentShape, 8);
+                Canvas.SetLeft(currentShape, 8);
+                currentShape.Width = width;
+                currentShape.Height = height;
+                currentShape.Stroke = new SolidColorBrush(penColor);
+                currentShape.StrokeThickness = penThickness;
+                canvasTool.DrawShape(currentShape, false);
+                currentShape = null;
+
             }
-            else if(selectedShape!=null && canvasTool.drawType == DrawType.nothing)
+            else if (selectedShape != null && canvasTool.drawType == DrawType.nothing)
             {
                 double width = 0;
                 double height = 0;
@@ -666,7 +571,5 @@ namespace DrawOrPaint
             else
                 canvasTool.drawType = DrawType.nothing;
         }
-
-
     }
 }
