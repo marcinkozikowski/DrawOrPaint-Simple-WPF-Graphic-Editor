@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DrawOrPaint"
         mc:Ignorable="d"
-        Title="Chose your jpeg image quality" Height="200" Width="300">
+        Title="Chose your jpeg image quality" Height="200" Width="400">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -13,15 +13,17 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
         <TextBlock Padding="3px" Text="Chose image quality you want to save your new image file" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" TextWrapping="WrapWithOverflow"/>
-        <Slider Padding="5px" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Maximum="100" Minimum="10" TickFrequency="10" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Name="qualitySlider" ValueChanged="qualitySlider_ValueChanged"/>
+        <Label Content="LowQuality" Grid.Row="1" Grid.Column="0"/>
+        <Slider Padding="5px" Margin="7px" Grid.Row="1" Grid.Column="1" Maximum="100" Minimum="10" TickFrequency="10" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Name="qualitySlider" ValueChanged="qualitySlider_ValueChanged"/>
+        <Label Content="TheBestQuality" Grid.Row="1" Grid.Column="3"/>
         <StackPanel Orientation="Horizontal" Grid.Column="3" Grid.Row="2">
-            <Button Padding="5px" Content="OK" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Click="JpegQualityOk_Click"></Button>
+            <Button Padding="5px" Content="Save" Margin="7px" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Click="JpegQualityOk_Click"></Button>
         </StackPanel>
 
     </Grid>
