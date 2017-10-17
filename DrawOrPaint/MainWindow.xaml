@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DrawOrPaint"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="1200">
+        Title="MainWindow" Height="700" Width="1200"
+        Background="LightGray">
 
     <Window.Resources>
         <Style TargetType="{x:Type Button}">
@@ -25,23 +26,23 @@
         
         <Menu IsMainMenu="True" FontSize="16px" Height="auto" Grid.Row="0" Name="MainMenu">
             <MenuItem Header="_File">
-                <MenuItem Header="Nowy">
+                <MenuItem Header="New">
                     <MenuItem.Icon>
                         <Image Source="Icons/new-box.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Otwórz">
+                <MenuItem Header="Open" Click="OpenMenuItem_Click">
                     <MenuItem.Icon>
                         <Image Source="Icons/window-open.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Zapisz">
+                <MenuItem Header="Save As..." Click="SaveMenuItem_Click">
                     <MenuItem.Icon>
                         <Image Source="Icons/content-save.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
-                <MenuItem Header="Wyjście">
+                <MenuItem Header="Exit">
                     <MenuItem.Icon>
                         <Image Source="Icons/exit-to-app.png"/>
                     </MenuItem.Icon>
@@ -170,30 +171,45 @@
             </TabItem>
         </TabControl>
 
-        <ScrollViewer Grid.Row="2" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Margin="3px" Grid.Row="2" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
             <Border BorderThickness="1" BorderBrush="DarkGray" Margin="5px">
-                <Canvas x:Name="main_canvas"  Width="500" Height="500" VerticalAlignment="Top" HorizontalAlignment="Left" ClipToBounds="True" Background="White" ScrollViewer.HorizontalScrollBarVisibility="Auto" MouseLeftButtonDown="main_canvas_MouseLeftButtonDown" MouseMove="main_canvas_MouseMove" MouseLeftButtonUp="main_canvas_MouseLeftButtonUp" PreviewMouseLeftButtonDown="main_canvas_PreviewMouseLeftButtonDown">
+                <Canvas x:Name="main_canvas"  Width="1300" Margin="5px" Height="500" VerticalAlignment="Top" HorizontalAlignment="Left" ClipToBounds="True" Background="White" ScrollViewer.HorizontalScrollBarVisibility="Auto" MouseLeftButtonDown="main_canvas_MouseLeftButtonDown" MouseMove="main_canvas_MouseMove" MouseLeftButtonUp="main_canvas_MouseLeftButtonUp" PreviewMouseLeftButtonDown="main_canvas_PreviewMouseLeftButtonDown">
                 </Canvas>
             </Border>
         </ScrollViewer>
 
-        <Grid Grid.Row="3" Name="CurrentToolsInfoGrid">
+        <Grid Grid.Row="3" Name="CurrentToolsInfoGrid" ShowGridLines="False">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Label Content="Currently Selected Tool: " FontWeight="Bold" Grid.Column="0"/>
-            <Label Content="null" Name="currentToolLabel" Grid.Column="1"/>
-            <Separator Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Label Content="Current File: " FontWeight="Bold" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Center"/>
+            <Label Content="null" Name="currentFileLabel" Grid.Column="1" Grid.Row="0" FontSize="10px"/>
+            <Label Content="null" Name="currentFileNameLabel" Grid.Column="1" Grid.Row="1" FontSize="10px"/>
+            <Label Content="Currently Selected Tool: " FontWeight="Bold" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Center" />
+            <Label Content="null" Name="currentToolLabel" Grid.Column="4" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Center"/>
+            <Separator Grid.Column="2" Grid.Row="0" Grid.RowSpan="2">
                 <Separator.LayoutTransform>
                     <RotateTransform Angle="90" />
                 </Separator.LayoutTransform>
             </Separator>
-            <Label Content="Currently Selected Item: " FontWeight="Bold" Grid.Column="3"/>
-            <Label Content="null" Name="currentShapeLabel" Grid.Column="4"/>
+            <Separator Grid.Column="5" Grid.Row="0" Grid.RowSpan="2">
+                <Separator.LayoutTransform>
+                    <RotateTransform Angle="90" />
+                </Separator.LayoutTransform>
+            </Separator>
+            <Label Content="Currently Selected Item: " FontWeight="Bold" Grid.Column="6" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Center"/>
+            <Label Content="null" Name="currentShapeLabel" Grid.Column="7" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Center"/>
         </Grid>
     </Grid>
 

@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DrawOrPaint.Tools;
+using Microsoft.Win32;
+using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace DrawOrPaint
@@ -37,6 +33,8 @@ namespace DrawOrPaint
         private bool capture;
         private bool addShape;
         private bool dragInProgress = false;
+        const double ScaleRate = 1.2;
+        ScaleTransform currentZoom;
 
         public MainWindow()
         {
@@ -45,15 +43,15 @@ namespace DrawOrPaint
             penColor = Colors.Black;
             fillColor = Colors.Black;
             penThickness = 5;
+            currentZoom = new ScaleTransform();
         }
+
         Color buttonBackground = Color.FromRgb(System.Convert.ToByte(221), System.Convert.ToByte(221), System.Convert.ToByte(221));
 
         #region MouseHandlers
 
         private void SetMouseCursor()
         {
-            // See what cursor we should display.
-
             Cursor desired_cursor = Cursors.Arrow;
             switch (currentHitType)
             {
@@ -80,11 +78,9 @@ namespace DrawOrPaint
                     desired_cursor = Cursors.SizeWE;
                     break;
             }
-            // Display the desired cursor.
             if (Cursor != desired_cursor) Cursor = desired_cursor;
             main_canvas.Cursor = desired_cursor;
         }
-        // Return a HitType value to indicate what is at the point.
         private HitType SetHitType(Shape rect, Point point)
         {
             if (selectedShape is Rectangle || selectedShape is Ellipse)
@@ -148,6 +144,7 @@ namespace DrawOrPaint
 
         private void main_canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            
             mDown = e.GetPosition(this.main_canvas);
             capture = true;
 
@@ -202,6 +199,7 @@ namespace DrawOrPaint
                         temp = new Rectangle();
                     }
                     temp.Stroke = new SolidColorBrush(penColor);
+                    temp.Fill = Brushes.Transparent;
                     temp.StrokeThickness = penThickness;
                     temp.IsHitTestVisible = true;
                     temp.Width = currentShape.Width;
@@ -224,6 +222,12 @@ namespace DrawOrPaint
                 line.X2 = currentLine.X2;
                 line.Y1 = currentLine.Y1;
                 line.Y2 = currentLine.Y2;
+
+                //double width = Math.Abs(line.X2 - line.X1);
+                //double height = Math.Abs(line.Y2 - line.Y1);
+
+                //line.Width = width;
+                //line.Height = height;
 
                 line.IsHitTestVisible = true;
 
@@ -469,21 +473,64 @@ namespace DrawOrPaint
 
         private void ZoomOutBtn_Click(object sender, RoutedEventArgs e)
         {
-            var st = new ScaleTransform();
-            st.ScaleX /= 1.1;
-            st.ScaleY /= 1.1;
+            currentZoom.ScaleX /= ScaleRate;
+            currentZoom.ScaleY /= ScaleRate;
 
-            main_canvas.RenderTransform = st;
+            main_canvas.RenderTransform = currentZoom;
+            double scale = Math.Round((currentZoom.ScaleX * 100), 0);
+            CurrentZoom.Content = scale.ToString()+ "%";
         }
 
         private void ZoomInBtn_Click(object sender, RoutedEventArgs e)
         {
-            var st = new ScaleTransform();
-            st.ScaleX *= 1.1;
-            st.ScaleY *= 1.1;
+            
+            currentZoom.ScaleX *= ScaleRate;
+            currentZoom.ScaleY *= ScaleRate;
 
-            main_canvas.RenderTransform = st;
+            main_canvas.RenderTransform = currentZoom;
+
+            double scale = Math.Round((currentZoom.ScaleX * 100),0);
+            CurrentZoom.Content = scale.ToString() + "%";
         }
+
+        #region MenuItems Handlers
+
+        private void OpenMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string filename = "";
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "Image files (*.ppm;*.jpeg;*.jpg)|*.ppm;*.jpeg;*.jpg";
+                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    filename = openFileDialog.FileName;
+                    canvasTool.OpenNewImageFile(filename);
+
+                }
+                currentFileLabel.Content = PixelMap.Width + "x" + PixelMap.Height;
+                currentFileNameLabel.Content = System.IO.Path.GetFileName(filename);
+            }
+            catch (Exception ex)
+            {
+               //ShowException(ex);
+            }
+        }
+
+        private void SaveMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                JpegQuality_Window w = new JpegQuality_Window();
+                w.Show();
+            }
+            catch (Exception ex)
+            {
+                ShowException(ex);
+            }
+        }
+        #endregion
 
         private void SaveDimensBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -504,6 +551,7 @@ namespace DrawOrPaint
                 Double.TryParse(HeightTextBox.Text.ToString(), out height);
                 Canvas.SetTop(currentShape, 8);
                 Canvas.SetLeft(currentShape, 8);
+                currentShape.Fill = Brushes.Transparent;
                 currentShape.Width = width;
                 currentShape.Height = height;
                 currentShape.Stroke = new SolidColorBrush(penColor);
@@ -522,6 +570,7 @@ namespace DrawOrPaint
 
                 selectedShape.Width = width;
                 selectedShape.Height = height;
+                //selectedShape.Fill = Brushes.Transparent;
                 selectedShape.Stroke = new SolidColorBrush(penColor);
                 selectedShape.StrokeThickness = penThickness;
 
@@ -529,6 +578,13 @@ namespace DrawOrPaint
                 canvasTool.DrawShape(selectedShape, false);
                 selectedShape = null;
             }
+        }
+
+        private void ShowException(Exception ex)
+        {
+            string message = ex.InnerException.Message;
+            string caption = "PixelMap Error! " + ex.Message;
+            MessageBox.Show(message, caption, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void getShape(object sender, RoutedEventArgs e)
