@@ -67,9 +67,16 @@
     <Compile Include="JpegQuality_Window.xaml.cs">
       <DependentUpon>JpegQuality_Window.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Loading_Window.xaml.cs">
+      <DependentUpon>Loading_Window.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tools\PixelMap.cs" />
     <Compile Include="Tools\PixelMap2.cs" />
     <Page Include="JpegQuality_Window.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Loading_Window.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

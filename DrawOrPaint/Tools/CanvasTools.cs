@@ -50,6 +50,8 @@ namespace DrawOrPaint
 
         public void OpenNewImageFile(string filePath)
         {
+            Loading_Window lw = new Loading_Window();
+            lw.Show();
             if (filePath.Contains(".ppm"))
             {
                 var bmp = PixelMap2.Load(filePath);
@@ -59,10 +61,12 @@ namespace DrawOrPaint
                 IntPtr hBitmap = bmap.GetHbitmap();
                 Image MyImg = new Image();
                 MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-                canvas.Width = bmap.Width;
-                canvas.Height = bmap.Height;
+
+                canvas.Width = bmp.Width;
+                canvas.Height = bmp.Height;
                 canvas.Children.Clear();
                 canvas.Children.Add(MyImg);
+                RenderOptions.SetBitmapScalingMode(canvas, BitmapScalingMode.NearestNeighbor);
             }
             else if (filePath.Contains(".jpg"))
             {
@@ -79,6 +83,7 @@ namespace DrawOrPaint
                 canvas.Height = bitmapSource.Height;
                 canvas.Children.Add(MyImg);
             }
+            lw.Close();
         }
 
         public void SaveJpegFile(Canvas canvas, string filename,int quality)

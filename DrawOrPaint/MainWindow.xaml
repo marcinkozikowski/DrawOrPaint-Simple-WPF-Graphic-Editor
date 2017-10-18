@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DrawOrPaint"
         mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
         Title="MainWindow" Height="700" Width="1200"
         Background="LightGray">
 
@@ -173,7 +174,7 @@
 
         <ScrollViewer Margin="3px" Grid.Row="2" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
             <Border BorderThickness="1" BorderBrush="DarkGray" Margin="5px">
-                <Canvas x:Name="main_canvas"  Width="1300" Margin="5px" Height="500" VerticalAlignment="Top" HorizontalAlignment="Left" ClipToBounds="True" Background="White" ScrollViewer.HorizontalScrollBarVisibility="Auto" MouseLeftButtonDown="main_canvas_MouseLeftButtonDown" MouseMove="main_canvas_MouseMove" MouseLeftButtonUp="main_canvas_MouseLeftButtonUp" PreviewMouseLeftButtonDown="main_canvas_PreviewMouseLeftButtonDown">
+                <Canvas x:Name="main_canvas" SnapsToDevicePixels="True" Width="1300" Margin="5px" Height="500" VerticalAlignment="Top" HorizontalAlignment="Left" ClipToBounds="True" Background="White" ScrollViewer.HorizontalScrollBarVisibility="Auto" MouseLeftButtonDown="main_canvas_MouseLeftButtonDown" MouseMove="main_canvas_MouseMove" MouseLeftButtonUp="main_canvas_MouseLeftButtonUp" PreviewMouseLeftButtonDown="main_canvas_PreviewMouseLeftButtonDown">
                 </Canvas>
             </Border>
         </ScrollViewer>
