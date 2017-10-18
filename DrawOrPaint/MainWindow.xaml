@@ -181,7 +181,7 @@
         <Grid Grid.Row="3" Name="CurrentToolsInfoGrid" ShowGridLines="False">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>

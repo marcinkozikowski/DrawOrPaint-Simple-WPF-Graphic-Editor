@@ -1,8 +1,11 @@
-﻿using DrawOrPaint.Tools;
+﻿using DmitryBrant.ImageFormats;
+using DrawOrPaint.Tools;
+using FreeImageAPI;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,7 +21,7 @@ namespace DrawOrPaint
     class CanvasTools
     {
         public Canvas canvas;  
-        public DrawType drawType; 
+        public DrawType drawType;
 
         public CanvasTools(Canvas c)
         {
@@ -47,24 +50,21 @@ namespace DrawOrPaint
 
         public void OpenNewImageFile(string filePath)
         {
-            if(filePath.Contains(".ppm"))
+            if (filePath.Contains(".ppm"))
             {
-                    //PixelMap pmm = new PixelMap(filePath);
-                    System.Drawing.Bitmap bmap = PixelMap.ReadPPM(filePath);
+                var bmp = PixelMap2.Load(filePath);
 
-                    IntPtr hBitmap = bmap.GetHbitmap();
-                    Image MyImg = new Image();
-                    //Convert Bitmap To Image
-                    MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                System.Drawing.Bitmap bmap = bmp;
 
-                    RenderOptions.SetBitmapScalingMode(MyImg, BitmapScalingMode.Linear);
-
-                    canvas.Width = bmap.Width;
-                    canvas.Height = bmap.Height;
-                    canvas.Children.Clear();
-                    canvas.Children.Add(MyImg);
+                IntPtr hBitmap = bmap.GetHbitmap();
+                Image MyImg = new Image();
+                MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                canvas.Width = bmap.Width;
+                canvas.Height = bmap.Height;
+                canvas.Children.Clear();
+                canvas.Children.Add(MyImg);
             }
-            else if(filePath.Contains(".jpg"))
+            else if (filePath.Contains(".jpg"))
             {
                 ImageBrush brush = new ImageBrush();
                 Image MyImg = new Image();

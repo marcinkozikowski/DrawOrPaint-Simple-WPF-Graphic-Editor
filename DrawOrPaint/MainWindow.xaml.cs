@@ -509,7 +509,7 @@ namespace DrawOrPaint
                     canvasTool.OpenNewImageFile(filename);
 
                 }
-                currentFileLabel.Content = PixelMap.Width + "x" + PixelMap.Height;
+                currentFileLabel.Content = "Res: "+PixelMap2.BmpWidth + "x" + PixelMap2.BmpHeight+"  Max Color Value: "+PixelMap2.BmpMaxVal;
                 currentFileNameLabel.Content = System.IO.Path.GetFileName(filename);
             }
             catch (Exception ex)
