@@ -300,7 +300,6 @@ namespace DrawOrPaint.Tools
         private static int FindData(byte[] reader)
         {
             char temp = ' ';
-            char previousChar = ' ';
             temp = Convert.ToChar(reader[position]);
             while(temp=='#')
             {

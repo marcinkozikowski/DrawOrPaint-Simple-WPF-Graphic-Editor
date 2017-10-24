@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
@@ -497,8 +498,8 @@ namespace DrawOrPaint
 
         private void OpenMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
+            //try
+            //{
                 string filename = "";
                 OpenFileDialog openFileDialog = new OpenFileDialog();
                 openFileDialog.Filter = "Image files (*.ppm;*.jpeg;*.jpg)|*.ppm;*.jpeg;*.jpg";
@@ -511,11 +512,11 @@ namespace DrawOrPaint
                 }
                 currentFileLabel.Content = "Res: "+PixelMap2.BmpWidth + "x" + PixelMap2.BmpHeight+"  Max Color Value: "+PixelMap2.BmpMaxVal;
                 currentFileNameLabel.Content = System.IO.Path.GetFileName(filename);
-            }
-            catch (Exception ex)
-            {
-               //ShowException(ex);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    ShowException(ex);
+            //}
         }
 
         private void SaveMenuItem_Click(object sender, RoutedEventArgs e)
@@ -527,7 +528,7 @@ namespace DrawOrPaint
             }
             catch (Exception ex)
             {
-                ShowException(ex);
+                ShowException(ex.Message);
             }
         }
         #endregion
@@ -580,10 +581,26 @@ namespace DrawOrPaint
             }
         }
 
-        private void ShowException(Exception ex)
+        private void btnRightMenuHide_Click(object sender, RoutedEventArgs e)
         {
-            string message = ex.InnerException.Message;
-            string caption = "PixelMap Error! " + ex.Message;
+            btnRightMenuHide.Visibility = System.Windows.Visibility.Hidden;
+            btnRightMenuShow.Visibility = System.Windows.Visibility.Visible;
+            Storyboard sb = Resources["sbHideRightMenu"] as Storyboard;
+            sb.Begin(pnlRightMenu);
+        }
+
+        private void btnRightMenuShow_Click(object sender, RoutedEventArgs e)
+        {
+            btnRightMenuHide.Visibility = System.Windows.Visibility.Visible;
+            btnRightMenuShow.Visibility = System.Windows.Visibility.Hidden;
+            Storyboard sb = Resources["sbShowRightMenu"] as Storyboard;
+            sb.Begin(pnlRightMenu);
+        }
+
+        public void ShowException(string ex)
+        {
+            string message = ex;
+            string caption = "PixelMap Error! " + ex;
             MessageBox.Show(message, caption, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 

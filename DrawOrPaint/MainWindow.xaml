@@ -10,6 +10,13 @@
         Background="LightGray">
 
     <Window.Resources>
+        <Storyboard x:Key="sbShowRightMenu" >
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0,0,-250,0" To="0,0,0,0" DecelerationRatio=".9" Duration="0:0:1" />
+        </Storyboard>
+        <Storyboard x:Key="sbHideRightMenu">
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0,0,0,0" To="0,0,-250,0" AccelerationRatio=".9" Duration="0:0:1" />
+        </Storyboard>
+
         <Style TargetType="{x:Type Button}">
             <Setter Property="Padding" Value="7"/>
             <Setter Property="Margin" Value="3"/>
@@ -172,12 +179,168 @@
             </TabItem>
         </TabControl>
 
-        <ScrollViewer Margin="3px" Grid.Row="2" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
-            <Border BorderThickness="1" BorderBrush="DarkGray" Margin="5px">
-                <Canvas x:Name="main_canvas" SnapsToDevicePixels="True" Width="1300" Margin="5px" Height="500" VerticalAlignment="Top" HorizontalAlignment="Left" ClipToBounds="True" Background="White" ScrollViewer.HorizontalScrollBarVisibility="Auto" MouseLeftButtonDown="main_canvas_MouseLeftButtonDown" MouseMove="main_canvas_MouseMove" MouseLeftButtonUp="main_canvas_MouseLeftButtonUp" PreviewMouseLeftButtonDown="main_canvas_PreviewMouseLeftButtonDown">
-                </Canvas>
-            </Border>
-        </ScrollViewer>
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <ScrollViewer Margin="3px" Grid.Row="0" Grid.Column="0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <Border BorderThickness="1" BorderBrush="DarkGray" Margin="5px">
+                    <Canvas x:Name="main_canvas" SnapsToDevicePixels="True" Width="1300" Margin="5px" Height="500" VerticalAlignment="Top" HorizontalAlignment="Left" ClipToBounds="True" Background="White" ScrollViewer.HorizontalScrollBarVisibility="Auto" MouseLeftButtonDown="main_canvas_MouseLeftButtonDown" MouseMove="main_canvas_MouseMove" MouseLeftButtonUp="main_canvas_MouseLeftButtonUp" PreviewMouseLeftButtonDown="main_canvas_PreviewMouseLeftButtonDown">
+                    </Canvas>
+                </Border>
+            </ScrollViewer>
+
+            <StackPanel Grid.Column="1" Grid.Row="0" Panel.ZIndex="2" Name="pnlRightMenu" Orientation="Horizontal" Height="Auto" HorizontalAlignment="Right" Margin="0,0,-250,0">
+                <Grid>
+                    <Button Name="btnRightMenuHide" Width="48" Height="Auto" Click="btnRightMenuHide_Click" Visibility="Hidden">
+                        <TextBlock  Width="10" TextWrapping="Wrap">
+                            <Run Text=">>"/>
+        <LineBreak/>
+                            <LineBreak/>
+                    <Run Text="C"/>
+        <LineBreak/>
+        <Run Text="O"/>
+        <LineBreak/>
+        <Run Text="L"/>
+        <LineBreak/>
+        <Run Text="O"/>
+        <LineBreak/>
+        <Run Text="R"/>
+        <LineBreak/>
+            <LineBreak/>        
+        <Run Text="M"/>
+        <LineBreak/>
+        <Run Text="E"/>
+        <LineBreak/>
+                    <Run Text="N"/>
+        <LineBreak/>
+        <Run Text="U"/>
+                        </TextBlock>
+                    </Button>
+                    <Button Name="btnRightMenuShow" Width="48" Height="Auto" Click="btnRightMenuShow_Click" >
+                        <TextBlock  Width="10" TextWrapping="Wrap">
+                            <Run Text=" &lt; &lt;"/>
+        <LineBreak/>
+                            <LineBreak/>
+                    <Run Text="C"/>
+        <LineBreak/>
+        <Run Text="O"/>
+        <LineBreak/>
+        <Run Text="L"/>
+        <LineBreak/>
+        <Run Text="O"/>
+        <LineBreak/>
+        <Run Text="R"/>
+        <LineBreak/>
+            <LineBreak/>        
+        <Run Text="M"/>
+        <LineBreak/>
+        <Run Text="E"/>
+        <LineBreak/>
+                    <Run Text="N"/>
+        <LineBreak/>
+        <Run Text="U"/>
+                        </TextBlock>
+                    </Button>
+                </Grid>
+                <Border BorderBrush="Black" BorderThickness="1" Width="250" Background="LightGray" >
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="20"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="25"/>
+                        </Grid.RowDefinitions>
+
+                        <ScrollBar Name="vscroll" 
+            Grid.Row="0" Grid.Column="1"
+            Orientation="Vertical"  
+            Minimum="-180" Maximum="180" 
+            LargeChange="10" SmallChange="1" Value="0" />
+
+                        <ScrollBar Name="hscroll" 
+            Grid.Row="1" Grid.Column="0"
+            Orientation="Horizontal" 
+            Minimum="-180" Maximum="180" 
+            LargeChange="10" SmallChange="1" Value="0" />
+
+                        <Viewport3D Margin="4,4,4,4" Grid.Row="0" Grid.Column="0">
+                            <ModelVisual3D>
+                                <ModelVisual3D.Content>
+                                    <Model3DGroup>
+                                        <!-- Lights -->
+                                        <AmbientLight Color="Gray" />
+                                        <DirectionalLight Color="Gray" Direction="1,-2,-3" />
+                                        <DirectionalLight Color="Gray" Direction="-1,2,3" />
+
+                                        <GeometryModel3D>
+                                            <GeometryModel3D.Geometry>
+                                                <!-- Cube -->
+                                                <MeshGeometry3D 
+                                    Positions="
+                                      -1,-1,-1   1,-1,-1   1,-1, 1  -1,-1, 1
+                                      -1,-1, 1   1,-1, 1   1, 1, 1  -1, 1, 1
+                                       1,-1, 1   1,-1,-1   1, 1,-1   1, 1, 1
+                                       1, 1, 1   1, 1,-1  -1, 1,-1  -1, 1, 1
+                                      -1,-1, 1  -1, 1, 1  -1, 1,-1  -1,-1,-1 
+                                      -1,-1,-1  -1, 1,-1   1, 1,-1   1,-1,-1
+                                      "
+                                    TriangleIndices="
+                                       0  1  2     2  3  0
+                                       4  5  6     6  7  4
+                                       8  9 10    10 11  8
+                                      12 13 14    14 15 12
+                                      16 17 18    18 19 16
+                                      20 21 22    22 23 20
+                                      " />
+                                            </GeometryModel3D.Geometry>
+
+                                            <GeometryModel3D.Material>
+                                                <DiffuseMaterial Brush="Blue" />
+                                            </GeometryModel3D.Material>
+                                        </GeometryModel3D>
+                                    </Model3DGroup>
+                                </ModelVisual3D.Content>
+                            </ModelVisual3D>
+
+                            <Viewport3D.Camera>
+                                <PerspectiveCamera 
+                  Position = "1.5, 2, 3"
+                  LookDirection = "-1.5, -2, -3"
+                  UpDirection = "0, 1, 0"
+                  FieldOfView = "60">
+                                    <PerspectiveCamera.Transform>
+                                        <Transform3DGroup>
+                                            <RotateTransform3D>
+                                                <RotateTransform3D.Rotation>
+                                                    <AxisAngleRotation3D
+                                      Axis="0 1 0" 
+                                      Angle="{Binding ElementName=hscroll, Path=Value}" />
+                                                </RotateTransform3D.Rotation>
+                                            </RotateTransform3D>
+                                            <RotateTransform3D>
+                                                <RotateTransform3D.Rotation>
+                                                    <AxisAngleRotation3D
+                                      Axis="1 0 0" 
+                                      Angle="{Binding ElementName=vscroll, Path=Value}" />
+                                                </RotateTransform3D.Rotation>
+                                            </RotateTransform3D>
+                                        </Transform3DGroup>
+                                    </PerspectiveCamera.Transform>
+                                </PerspectiveCamera>
+                            </Viewport3D.Camera>
+                        </Viewport3D>
+                    </Grid>
+                </Border>
+            </StackPanel>
+            
+        </Grid>
 
         <Grid Grid.Row="3" Name="CurrentToolsInfoGrid" ShowGridLines="False">
             <Grid.ColumnDefinitions>

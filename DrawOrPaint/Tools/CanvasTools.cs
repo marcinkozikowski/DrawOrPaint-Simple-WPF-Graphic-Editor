@@ -52,36 +52,45 @@ namespace DrawOrPaint
         {
             Loading_Window lw = new Loading_Window();
             lw.Show();
-            if (filePath.Contains(".ppm"))
+            try
             {
-                var bmp = PixelMap2.Load(filePath);
+                if (filePath.Contains(".ppm"))
+                {
+                    var bmp = PixelMap2.Load(filePath);
 
-                System.Drawing.Bitmap bmap = bmp;
+                    System.Drawing.Bitmap bmap = bmp;
 
-                IntPtr hBitmap = bmap.GetHbitmap();
-                Image MyImg = new Image();
-                MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                    IntPtr hBitmap = bmap.GetHbitmap();
+                    Image MyImg = new Image();
+                    MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
 
-                canvas.Width = bmp.Width;
-                canvas.Height = bmp.Height;
-                canvas.Children.Clear();
-                canvas.Children.Add(MyImg);
-                RenderOptions.SetBitmapScalingMode(canvas, BitmapScalingMode.NearestNeighbor);
+                    canvas.Width = bmp.Width;
+                    canvas.Height = bmp.Height;
+                    canvas.Children.Clear();
+                    canvas.Children.Add(MyImg);
+                    RenderOptions.SetBitmapScalingMode(canvas, BitmapScalingMode.NearestNeighbor);
+                }
+                else if (filePath.Contains(".jpg"))
+                {
+                    ImageBrush brush = new ImageBrush();
+                    Image MyImg = new Image();
+
+                    Stream imageStreamSource = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                    JpegBitmapDecoder decoder = new JpegBitmapDecoder(imageStreamSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+                    BitmapSource bitmapSource = decoder.Frames[0];
+
+                    MyImg.Source = bitmapSource;
+                    canvas.Children.Clear();
+                    canvas.Width = bitmapSource.Width;
+                    canvas.Height = bitmapSource.Height;
+                    canvas.Children.Add(MyImg);
+
+                    //((MainWindow)Application.Current.MainWindow).currentFileLabel.Content = "Res: " + bitmapSource.Width + "x" + bitmapSource.Height;
+                }
             }
-            else if (filePath.Contains(".jpg"))
+            catch(Exception ex)
             {
-                ImageBrush brush = new ImageBrush();
-                Image MyImg = new Image();
-
-                Stream imageStreamSource = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
-                JpegBitmapDecoder decoder = new JpegBitmapDecoder(imageStreamSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
-                BitmapSource bitmapSource = decoder.Frames[0];
-
-                MyImg.Source = bitmapSource;
-                canvas.Children.Clear();
-                canvas.Width = bitmapSource.Width;
-                canvas.Height = bitmapSource.Height;
-                canvas.Children.Add(MyImg);
+                ((MainWindow)Application.Current.MainWindow).ShowException(ex.Message);
             }
             lw.Close();
         }
