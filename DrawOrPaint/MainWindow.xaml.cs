@@ -472,28 +472,6 @@ namespace DrawOrPaint
         }
         #endregion
 
-        private void ZoomOutBtn_Click(object sender, RoutedEventArgs e)
-        {
-            currentZoom.ScaleX /= ScaleRate;
-            currentZoom.ScaleY /= ScaleRate;
-
-            main_canvas.RenderTransform = currentZoom;
-            double scale = Math.Round((currentZoom.ScaleX * 100), 0);
-            CurrentZoom.Content = scale.ToString()+ "%";
-        }
-
-        private void ZoomInBtn_Click(object sender, RoutedEventArgs e)
-        {
-            
-            currentZoom.ScaleX *= ScaleRate;
-            currentZoom.ScaleY *= ScaleRate;
-
-            main_canvas.RenderTransform = currentZoom;
-
-            double scale = Math.Round((currentZoom.ScaleX * 100),0);
-            CurrentZoom.Content = scale.ToString() + "%";
-        }
-
         #region MenuItems Handlers
 
         private void OpenMenuItem_Click(object sender, RoutedEventArgs e)
@@ -525,6 +503,29 @@ namespace DrawOrPaint
             }
         }
         #endregion
+
+        #region Buttons Handlers
+        private void ZoomOutBtn_Click(object sender, RoutedEventArgs e)
+        {
+            currentZoom.ScaleX /= ScaleRate;
+            currentZoom.ScaleY /= ScaleRate;
+
+            main_canvas.RenderTransform = currentZoom;
+            double scale = Math.Round((currentZoom.ScaleX * 100), 0);
+            CurrentZoom.Content = scale.ToString() + "%";
+        }
+
+        private void ZoomInBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+            currentZoom.ScaleX *= ScaleRate;
+            currentZoom.ScaleY *= ScaleRate;
+
+            main_canvas.RenderTransform = currentZoom;
+
+            double scale = Math.Round((currentZoom.ScaleX * 100), 0);
+            CurrentZoom.Content = scale.ToString() + "%";
+        }
 
         private void SaveDimensBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -595,6 +596,8 @@ namespace DrawOrPaint
             penColor = color;
             currentColorLabel.Fill = new SolidColorBrush(penColor);
         }
+        #endregion
+
 
         public void ShowException(string ex)
         {
