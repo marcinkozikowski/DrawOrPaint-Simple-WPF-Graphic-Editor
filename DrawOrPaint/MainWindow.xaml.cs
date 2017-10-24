@@ -498,8 +498,6 @@ namespace DrawOrPaint
 
         private void OpenMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            //try
-            //{
                 string filename = "";
                 OpenFileDialog openFileDialog = new OpenFileDialog();
                 openFileDialog.Filter = "Image files (*.ppm;*.jpeg;*.jpg)|*.ppm;*.jpeg;*.jpg";
@@ -512,11 +510,6 @@ namespace DrawOrPaint
                 }
                 currentFileLabel.Content = "Res: "+PixelMap2.BmpWidth + "x" + PixelMap2.BmpHeight+"  Max Color Value: "+PixelMap2.BmpMaxVal;
                 currentFileNameLabel.Content = System.IO.Path.GetFileName(filename);
-            //}
-            //catch (Exception ex)
-            //{
-            //    ShowException(ex);
-            //}
         }
 
         private void SaveMenuItem_Click(object sender, RoutedEventArgs e)
@@ -595,6 +588,12 @@ namespace DrawOrPaint
             btnRightMenuShow.Visibility = System.Windows.Visibility.Hidden;
             Storyboard sb = Resources["sbShowRightMenu"] as Storyboard;
             sb.Begin(pnlRightMenu);
+        }
+
+        private void pickedColorChanged_Click(Color color)
+        {
+            penColor = color;
+            currentColorLabel.Fill = new SolidColorBrush(penColor);
         }
 
         public void ShowException(string ex)

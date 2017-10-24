@@ -252,15 +252,21 @@
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition />
+
                         </Grid.RowDefinitions>
-                        <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto">
-                            <custom:ColorPickerControl/>
+                        <Label Content="Color Picker" Grid.Row="0" FontWeight="Bold"/>
+                        <ScrollViewer Grid.Row="1" Margin="7px" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto">
+                            <custom:ColorPickerControl OnPickColor="pickedColorChanged_Click"/>
                         </ScrollViewer>
 
-                        
+                        <Separator Grid.Row="2" Margin="5px"/>
+                        <Label Content="3 RGB Cube" Grid.Row="3" FontWeight="Bold"/>
                         <!--<xctk:ColorPicker  Name="ClrPcker_Background" SelectedColorChanged="ClrPcker_Background_SelectedColorChanged"></xctk:ColorPicker>-->
-                        <Grid Grid.Row="1" Name="RgbCube">
+                        <Grid Grid.Row="4" Name="RgbCube" Margin="7px">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="20"/>
@@ -366,9 +372,12 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Name="ColorColumn"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*" Name="ColorRow"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <Label Content="Current File: " FontWeight="Bold" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Center"/>
@@ -388,6 +397,16 @@
             </Separator>
             <Label Content="Currently Selected Item: " FontWeight="Bold" Grid.Column="6" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Center"/>
             <Label Content="null" Name="currentShapeLabel" Grid.Column="7" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Center"/>
+
+            <Separator Grid.Column="8" Grid.Row="0" Grid.RowSpan="2">
+                <Separator.LayoutTransform>
+                    <RotateTransform Angle="90" />
+                </Separator.LayoutTransform>
+            </Separator>
+        
+            <Label Content="Currently Selected Color: " FontWeight="Bold" Grid.Column="9" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Center"/>
+            <Rectangle Name="currentColorLabel" Grid.Column="10" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Center" Fill="Black" Margin="5px" Width="20" Height="20"/>
+
         </Grid>
     </Grid>
 
