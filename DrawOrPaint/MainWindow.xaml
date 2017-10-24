@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DrawOrPaint"
+        xmlns:custom="clr-namespace:ColorPickerWPF;assembly=ColorPickerWPF"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="MainWindow" Height="700" Width="1200"
@@ -11,10 +12,10 @@
 
     <Window.Resources>
         <Storyboard x:Key="sbShowRightMenu" >
-            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0,0,-250,0" To="0,0,0,0" DecelerationRatio=".9" Duration="0:0:1" />
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0,0,-350,0" To="0,0,0,0" DecelerationRatio=".9" Duration="0:0:1" />
         </Storyboard>
         <Storyboard x:Key="sbHideRightMenu">
-            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0,0,0,0" To="0,0,-250,0" AccelerationRatio=".9" Duration="0:0:1" />
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0,0,0,0" To="0,0,-350,0" AccelerationRatio=".9" Duration="0:0:1" />
         </Storyboard>
 
         <Style TargetType="{x:Type Button}">
@@ -194,7 +195,7 @@
                 </Border>
             </ScrollViewer>
 
-            <StackPanel Grid.Column="1" Grid.Row="0" Panel.ZIndex="2" Name="pnlRightMenu" Orientation="Horizontal" Height="Auto" HorizontalAlignment="Right" Margin="0,0,-250,0">
+            <StackPanel Grid.Column="1" Grid.Row="0" Panel.ZIndex="2" Name="pnlRightMenu" Orientation="Horizontal" Height="Auto" HorizontalAlignment="Right" Margin="0,0,-350,0">
                 <Grid>
                     <Button Name="btnRightMenuHide" Width="48" Height="Auto" Click="btnRightMenuHide_Click" Visibility="Hidden">
                         <TextBlock  Width="10" TextWrapping="Wrap">
@@ -247,8 +248,19 @@
                         </TextBlock>
                     </Button>
                 </Grid>
-                <Border BorderBrush="Black" BorderThickness="1" Width="250" Background="LightGray" >
+                <Border BorderBrush="Black" BorderThickness="1" Width="350" Background="LightGray" >
                     <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto">
+                            <custom:ColorPickerControl/>
+                        </ScrollViewer>
+
+                        
+                        <!--<xctk:ColorPicker  Name="ClrPcker_Background" SelectedColorChanged="ClrPcker_Background_SelectedColorChanged"></xctk:ColorPicker>-->
+                        <Grid Grid.Row="1" Name="RgbCube">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="20"/>
@@ -337,12 +349,14 @@
                             </Viewport3D.Camera>
                         </Viewport3D>
                     </Grid>
+                    </Grid>
                 </Border>
             </StackPanel>
             
         </Grid>
+    
 
-        <Grid Grid.Row="3" Name="CurrentToolsInfoGrid" ShowGridLines="False">
+    <Grid Grid.Row="3" Name="CurrentToolsInfoGrid" ShowGridLines="False">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
