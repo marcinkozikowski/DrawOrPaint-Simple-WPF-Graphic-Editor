@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DrawOrPaint"
-        xmlns:custom="clr-namespace:ColorPickerWPF;assembly=ColorPickerWPF"
+        xmlns:control="clr-namespace:DrawOrPaint.Tools"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="MainWindow" Height="700" Width="1200"
@@ -196,6 +197,7 @@
             </ScrollViewer>
 
             <StackPanel Grid.Column="1" Grid.Row="0" Panel.ZIndex="2" Name="pnlRightMenu" Orientation="Horizontal" Height="Auto" HorizontalAlignment="Right" Margin="0,0,-350,0">
+                
                 <Grid>
                     <Button Name="btnRightMenuHide" Width="48" Height="Auto" Click="btnRightMenuHide_Click" Visibility="Hidden" BorderBrush="DarkGray">
                         <TextBlock  Width="10" TextWrapping="Wrap" TextAlignment="Left">
@@ -257,11 +259,12 @@
 
                         </Grid.RowDefinitions>
                         <Label Content="Color Picker" Grid.Row="0" FontWeight="Bold"/>
-                        <ScrollViewer Grid.Row="1" Margin="7px" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto">
-                            <custom:ColorPickerControl OnPickColor="pickedColorChanged_Click"/>
-                        </ScrollViewer>
+                            <ScrollViewer Grid.Row="1" Margin="7px" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                                <!--<custom:ColorPickerControl OnPickColor="pickedColorChanged_Click"/>-->
+                                <control:ColorPicker OnPickColor="pickedColorChanged_Click"/>
+                            </ScrollViewer>
 
-                        <Separator Grid.Row="2" Margin="5px"/>
+                            <Separator Grid.Row="2" Margin="5px"/>
                         <Label Content="3 RGB Cube" Grid.Row="3" FontWeight="Bold"/>
                         <!--<xctk:ColorPicker  Name="ClrPcker_Background" SelectedColorChanged="ClrPcker_Background_SelectedColorChanged"></xctk:ColorPicker>-->
                         <Grid Grid.Row="4" Name="RgbCube" Margin="7px">
@@ -301,8 +304,7 @@
                                                     <MeshGeometry3D
                                             Positions = "-1,1,1 1,1,1 1,1,-1 -1,1,-1"
 	                                        TriangleIndices = "0 1 2     2,3,0"
-                                            TextureCoordinates="0,1 1,1 1,0 0,0"
-                                        />
+                                            TextureCoordinates="0,0 1,0 1,1 0,1"/>
                                                 </GeometryModel3D.Geometry>
                                                 <GeometryModel3D.Material>
                                                     <DiffuseMaterial>
@@ -319,8 +321,7 @@
                                                     <MeshGeometry3D
                                             Positions = "-1,-1,1 1,-1,1 1,1,1 -1,1,1"
 	                                        TriangleIndices = "0 1 2     2,3,0"
-                                            TextureCoordinates="0,1 1,1 1,0 0,0"
-                                        />
+                                            TextureCoordinates="0,1 1,1 1,0 0,0"/>
                                                 </GeometryModel3D.Geometry>
                                                 <GeometryModel3D.Material>
                                                     <DiffuseMaterial>
@@ -337,13 +338,12 @@
                                                     <MeshGeometry3D
                                             Positions = "1,-1,1 1,-1,-1 1,1,-1 1,1,1"
 	                                        TriangleIndices = "0 1 2     2,3,0"
-                                            TextureCoordinates="0,1 1,1 1,0 0,0"
-                                        />
+                                            TextureCoordinates="1,1 1,0 0,0 0,1"/>
                                                 </GeometryModel3D.Geometry>
                                                 <GeometryModel3D.Material>
                                                     <DiffuseMaterial>
                                                         <DiffuseMaterial.Brush>
-                                                            <ImageBrush ImageSource="face6.png"/>
+                                                            <ImageBrush ImageSource="face3.png"/>
                                                         </DiffuseMaterial.Brush>
                                                     </DiffuseMaterial>
                                                 </GeometryModel3D.Material>
@@ -355,13 +355,12 @@
                                                     <MeshGeometry3D
                                             Positions = "-1,-1,-1 -1,-1,1 -1,1,1 -1,1,-1"
 	                                        TriangleIndices = "0 1 2     2,3,0"
-                                            TextureCoordinates="0,1 1,1 1,0 0,0"
-                                        />
+                                            TextureCoordinates="0,1 1,1 1,0 0,0"/>
                                                 </GeometryModel3D.Geometry>
                                                 <GeometryModel3D.Material>
                                                     <DiffuseMaterial>
                                                         <DiffuseMaterial.Brush>
-                                                            <ImageBrush ImageSource="face3.png"/>
+                                                            <ImageBrush ImageSource="face6.png"/>
                                                         </DiffuseMaterial.Brush>
                                                     </DiffuseMaterial>
                                                 </GeometryModel3D.Material>
@@ -373,8 +372,7 @@
                                                     <MeshGeometry3D
                                             Positions = "1,-1,-1 -1,-1,-1 -1,1,-1 1,1,-1"
 	                                        TriangleIndices = "0 1 2     2,3,0"
-                                            TextureCoordinates="0,1 1,1 1,0 0,0"
-                                        />
+                                            TextureCoordinates="0,0 1,0 1,1 0,1"/>
                                                 </GeometryModel3D.Geometry>
                                                 <GeometryModel3D.Material>
                                                     <DiffuseMaterial>
@@ -391,8 +389,7 @@
                                                     <MeshGeometry3D
                                             Positions = "-1,-1,-1 1,-1,-1 1,-1,1 -1,-1,1"
 	                                        TriangleIndices = "0 1 2     2,3,0"
-                                            TextureCoordinates="0,1 1,1 1,0 0,0"
-                                        />
+                                            TextureCoordinates="1,0 0,0 0,1 1,1"/>
                                                 </GeometryModel3D.Geometry>
                                                 <GeometryModel3D.Material>
                                                     <DiffuseMaterial>

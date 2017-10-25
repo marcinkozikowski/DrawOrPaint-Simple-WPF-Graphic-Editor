@@ -1,6 +1,4 @@
-﻿using DmitryBrant.ImageFormats;
-using DrawOrPaint.Tools;
-using FreeImageAPI;
+﻿using DrawOrPaint.Tools;
 using System;
 using System.Collections.Generic;
 using System.IO;

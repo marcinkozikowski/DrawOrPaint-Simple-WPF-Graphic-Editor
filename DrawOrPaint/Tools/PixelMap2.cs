@@ -39,7 +39,7 @@ namespace DrawOrPaint.Tools
             if ((char)stream.ReadByte() != 'P') throw new ApplicationException("Incorrect file format.");
             pnmType = (char)stream.ReadByte();
             if ((pnmType < '1') || (pnmType > '6')) throw new ApplicationException("Unrecognized bitmap type.");
-
+            var bmpDataTemp = new List<byte>();
             while (stream.Position < stream.Length)
             {
                 line = ReadLine(stream);
@@ -58,6 +58,10 @@ namespace DrawOrPaint.Tools
                     if (BmpWidth == -1) { BmpWidth = Convert.ToInt32(lineArray[i]); }
                     else if (BmpHeight == -1) { BmpHeight = Convert.ToInt32(lineArray[i]); }
                     else if (BmpMaxVal == -1) { BmpMaxVal = Convert.ToInt32(lineArray[i]); }
+                    else
+                    {
+                        bmpDataTemp.Add((byte)((Convert.ToInt32(lineArray[i]) * 255) / bmpMaxVal));
+                    }
                 }
 
                 if ((BmpWidth != -1) && (BmpHeight != -1) && (BmpMaxVal != -1))
@@ -80,6 +84,15 @@ namespace DrawOrPaint.Tools
                 {
                     int elementCount = 0, elementMod = 2;
                     int elementVal;
+                    if(bmpDataTemp.Any())
+                    {
+                        for(int i=0;i<bmpDataTemp.Count;i++)
+                        {
+                            bmpData[elementCount + elementMod] = bmpDataTemp.ElementAt(i);
+                            elementMod--;
+                            if (elementMod < 0) { elementCount += 4; elementMod = 2; }
+                        }
+                    }
                     while (stream2.Position < stream2.Length)
                     {
                         line = ReadLine(stream2);

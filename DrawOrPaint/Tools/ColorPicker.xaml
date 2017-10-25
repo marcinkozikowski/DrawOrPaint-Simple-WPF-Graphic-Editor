@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="DrawOrPaint.Tools.ColorPicker"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DrawOrPaint.Tools"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid ShowGridLines="false">
+
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <GroupBox Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" Header="Picked Color" Margin="5px">
+            <Rectangle  Fill="Black" Name="ColorRectangle" Margin="7px"/>
+        </GroupBox>
+
+        <Label Grid.Row="0" Grid.Column="1"  Grid.ColumnSpan="2" FontWeight="Bold" Content="RGB (Red, Green, Blue)"/>
+        <Label Grid.Row="1" Grid.Column="1" Content="R"/>
+        <TextBox Grid.Row="1" Grid.Column="2" Margin="5px" Name="RedEditText" TextChanged="RGB_Changed" Text="255"/>
+        <Label Grid.Row="2" Grid.Column="1" Content="G"/>
+        <TextBox Grid.Row="2" Grid.Column="2" Margin="5px" Name="GreenEditText" TextChanged="RGB_Changed" Text="255"/>
+        <Label Grid.Row="3" Grid.Column="1" Content="B"/>
+        <TextBox Grid.Row="3" Grid.Column="2" Margin="5px" Name="BlueEditText" TextChanged="RGB_Changed" Text="255"/>
+        <Label Grid.Row="4" Grid.Column="1"  Grid.ColumnSpan="2" FontWeight="Bold" Content="CMYK"/>
+        <Label Grid.Row="5" Grid.Column="1" Content="C"/>
+        <Label Grid.Row="5" Grid.Column="3" Content="%"/>
+        <TextBox Grid.Row="5" Grid.Column="2" Margin="5px" Name="CyanEditText" TextChanged="CMYK_Changed" Text="0"/>
+        <Label Grid.Row="6" Grid.Column="1" Content="M"/>
+        <Label Grid.Row="6" Grid.Column="3" Content="%"/>
+        <TextBox Grid.Row="6" Grid.Column="2" Margin="5px" Name="MagentaEditText" TextChanged="CMYK_Changed" Text="0"/>
+        <Label Grid.Row="7" Grid.Column="1" Content="Y"/>
+        <Label Grid.Row="7" Grid.Column="3" Content="%"/>
+        <TextBox Grid.Row="7" Grid.Column="2" Margin="5px" Name="YellowEditText" TextChanged="CMYK_Changed" Text="0"/>
+        <Label Grid.Row="8" Grid.Column="1" Content="K"/>
+        <Label Grid.Row="8" Grid.Column="3" Content="%"/>
+        <TextBox Grid.Row="8" Grid.Column="2" Margin="5px" Name="BlackEditText" TextChanged="CMYK_Changed" Text="0"/>
+    </Grid>
+</UserControl>
