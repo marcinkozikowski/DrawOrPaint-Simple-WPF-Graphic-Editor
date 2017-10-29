@@ -94,12 +94,57 @@ namespace DrawOrPaint.Tools
             }
         }
 
+        private void RGB_Slider_Changed(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
+        {
+            Slider rgb = sender as Slider;
+            string _name = rgb.Name;
+            if(_name.Equals("RedSlider"))
+            {
+                RedEditText.Text = Math.Round(RedSlider.Value,0).ToString();
+            }
+            else if (_name.Equals("GreenSlider"))
+            {
+                GreenEditText.Text = Math.Round(GreenSlider.Value, 0).ToString();
+            }
+            else if (_name.Equals("BlueSlider"))
+            {
+                BlueEditText.Text = Math.Round(BlueSlider.Value, 0).ToString();
+            }
+        }
+
+        private void CMYK_Slider_Changed(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
+        {
+            Slider rgb = sender as Slider;
+            string _name = rgb.Name;
+            if (_name.Equals("CyanSlider"))
+            {
+                CyanEditText.Text = Math.Round(CyanSlider.Value, 2).ToString();
+            }
+            else if (_name.Equals("MagentaSlider"))
+            {
+                MagentaEditText.Text = Math.Round(MagentaSlider.Value, 2).ToString();
+            }
+            else if (_name.Equals("YellowSlider"))
+            {
+                YellowEditText.Text = Math.Round(YellowSlider.Value, 2).ToString();
+            }
+            else if (_name.Equals("BlackSlider"))
+            {
+                BlackEditText.Text = Math.Round(BlackSlider.Value, 2).ToString();
+            }
+        }
+
         private void updateCMYKTextBox()
         {
             CyanEditText.Text = (Math.Round(c,2)).ToString();
             MagentaEditText.Text = (Math.Round(m, 2)).ToString();
             YellowEditText.Text = (Math.Round(y, 2)).ToString();
             BlackEditText.Text = (Math.Round(k, 2)).ToString();
+
+            CyanSlider.Value = (Math.Round(c, 2));
+            MagentaSlider.Value = (Math.Round(m, 2));
+            YellowSlider.Value = (Math.Round(y, 2));
+            BlackSlider.Value = (Math.Round(k, 2));
         }
 
         private void updateRGBTextBox()
@@ -107,6 +152,10 @@ namespace DrawOrPaint.Tools
             RedEditText.Text = red.ToString();
             GreenEditText.Text = green.ToString();
             BlueEditText.Text = blue.ToString();
+            RedSlider.Value = red;
+            BlueSlider.Value = blue;
+            GreenSlider.Value = green;
+
         }
 
         private double Max(double rPi, double gPi, double bPi)
