@@ -37,6 +37,7 @@ namespace DrawOrPaint
         private bool dragInProgress = false;
         const double ScaleRate = 1.2;
         ScaleTransform currentZoom;
+        private int brightnessValue;
 
         public MainWindow()
         {
@@ -49,6 +50,19 @@ namespace DrawOrPaint
         }
 
         Color buttonBackground = Color.FromRgb(System.Convert.ToByte(221), System.Convert.ToByte(221), System.Convert.ToByte(221));
+
+        public int BrightnessValue
+        {
+            get
+            {
+                return brightnessValue;
+            }
+
+            set
+            {
+                brightnessValue = value;
+            }
+        }
 
         #region MouseHandlers
 
@@ -597,27 +611,15 @@ namespace DrawOrPaint
             penColor = color;
             currentColorLabel.Fill = new SolidColorBrush(penColor);
         }
-        #endregion
-
 
         private void ApplayFilter(object sender, RoutedEventArgs e)
         {
             Button pickedFilter = sender as Button;
-            RenderTargetBitmap renderBitmap = new RenderTargetBitmap(
-             (int)main_canvas.Width, (int)main_canvas.Height,
-             96d, 96d, PixelFormats.Pbgra32);
-            // needed otherwise the image output is black
-            main_canvas.Measure(new Size((int)main_canvas.Width, (int)main_canvas.Height));
-            main_canvas.Arrange(new Rect(new Size((int)main_canvas.Width, (int)main_canvas.Height)));
 
-            renderBitmap.Render(main_canvas);
-            MemoryStream stream = new MemoryStream();
-            BitmapEncoder encoder = new BmpBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
-            encoder.Save(stream);
 
-            System.Drawing.Bitmap bitmapCanvas = new System.Drawing.Bitmap(stream);
+            System.Drawing.Bitmap bitmapCanvas = canvasTool.getBitmapFromCanvas();
             System.Drawing.Bitmap afterFilter;
+
             Image MyImg = new Image();
             IntPtr hBitmap;
             FilterBase filter;
@@ -627,33 +629,33 @@ namespace DrawOrPaint
                 case "EdgeDetection_Btn":
                     filter = new EdgeDetectionFilter();
                     afterFilter = bitmapCanvas.ConvolutionFilter(filter);
-                    main_canvas.Children.Clear();
                     hBitmap = afterFilter.GetHbitmap();
                     MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                    main_canvas.Children.Clear();
                     main_canvas.Children.Add(MyImg);
                     break;
                 case "GaussianBlur_Btn":
                     filter = new Gaussian3x3BlurFilter();
                     afterFilter = bitmapCanvas.ConvolutionFilter(filter);
-                    main_canvas.Children.Clear();
                     hBitmap = afterFilter.GetHbitmap();
                     MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                    main_canvas.Children.Clear();
                     main_canvas.Children.Add(MyImg);
                     break;
                 case "Soften_Btn":
                     filter = new SoftenFilter();
                     afterFilter = bitmapCanvas.ConvolutionFilter(filter);
-                    main_canvas.Children.Clear();
                     hBitmap = afterFilter.GetHbitmap();
                     MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                    main_canvas.Children.Clear();
                     main_canvas.Children.Add(MyImg);
                     break;
                 case "HighPass_Btn":
                     filter = new HighPass3x3Filter();
                     afterFilter = bitmapCanvas.ConvolutionFilter(filter);
-                    main_canvas.Children.Clear();
                     hBitmap = afterFilter.GetHbitmap();
                     MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                    main_canvas.Children.Clear();
                     main_canvas.Children.Add(MyImg);
                     break;
                 case "Median_Btn":
@@ -662,6 +664,78 @@ namespace DrawOrPaint
                     break;
             }
         }
+
+        private void BrightnessValue_Changed(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            int value = (int)Math.Round(BrightnessSlider.Value, 0);
+            BrightnesValueTextBox.Content = value.ToString();
+            BrightnessValue = value;
+        }
+
+        private void SetPointTransformation(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Controls.Image MyImg = new System.Windows.Controls.Image();
+            IntPtr hBitmap;
+
+            System.Drawing.Bitmap bitmap = canvasTool.getBitmapFromCanvas();
+            int value = int.Parse(PointTransformationValue.Text.ToString());
+
+            if (Addition.IsChecked==true)
+            {
+                bitmap = canvasTool.SetAddition(value, bitmap);
+            }
+            else if(Subtraction.IsChecked==true)
+            {
+                bitmap = canvasTool.SetSubtraction(value, bitmap);
+            }
+            else if(Division.IsChecked==true)
+            {
+                bitmap = canvasTool.SetDivision(value, bitmap);
+            }
+            else if(Multiplication.IsChecked==true)
+            {
+                bitmap = canvasTool.SetMultiplication(value, bitmap);
+            }
+
+            hBitmap = bitmap.GetHbitmap();
+            MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+
+            main_canvas.Children.Clear();
+            main_canvas.Children.Add(MyImg);
+        }
+
+        private void ChangeImageBrightness(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Controls.Image MyImg = new System.Windows.Controls.Image();
+            IntPtr hBitmap;
+
+            System.Drawing.Bitmap bitmap = canvasTool.getBitmapFromCanvas();
+            bitmap = canvasTool.SetBrightness(BrightnessValue, bitmap);
+
+            hBitmap = bitmap.GetHbitmap();
+            MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+
+            main_canvas.Children.Clear();
+            main_canvas.Children.Add(MyImg);
+        }
+
+        private void SetGrayscale_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Controls.Image MyImg = new System.Windows.Controls.Image();
+            IntPtr hBitmap;
+
+            System.Drawing.Bitmap bitmap = canvasTool.getBitmapFromCanvas();
+            bitmap = canvasTool.SetGrayscale(bitmap);
+
+            hBitmap = bitmap.GetHbitmap();
+            MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+
+            main_canvas.Children.Clear();
+            main_canvas.Children.Add(MyImg);
+        }
+
+        #endregion
+
 
         public void ShowException(string ex)
         {

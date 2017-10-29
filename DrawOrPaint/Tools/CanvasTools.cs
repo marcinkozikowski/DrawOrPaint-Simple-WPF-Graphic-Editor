@@ -11,6 +11,8 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Drawing.Drawing2D;
+using System.Drawing;
 
 namespace DrawOrPaint
 {
@@ -60,7 +62,7 @@ namespace DrawOrPaint
                     System.Drawing.Bitmap bmap = bmp;
 
                     IntPtr hBitmap = bmap.GetHbitmap();
-                    Image MyImg = new Image();
+                    System.Windows.Controls.Image MyImg = new System.Windows.Controls.Image();
                     MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
 
                     canvas.Width = bmp.Width;
@@ -72,7 +74,7 @@ namespace DrawOrPaint
                 else if (filePath.Contains(".jpg"))
                 {
                     ImageBrush brush = new ImageBrush();
-                    Image MyImg = new Image();
+                    System.Windows.Controls.Image MyImg = new System.Windows.Controls.Image();
 
                     Stream imageStreamSource = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
                     JpegBitmapDecoder decoder = new JpegBitmapDecoder(imageStreamSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
@@ -96,12 +98,23 @@ namespace DrawOrPaint
 
         public void SaveJpegFile(Canvas canvas, string filename,int quality)
         {
+            Rect b = VisualTreeHelper.GetDescendantBounds(canvas);
+
+            /// new a RenderTargetBitmap with actual size of c
+
+
+            Transform transform = canvas.LayoutTransform;
+
+            canvas.LayoutTransform = null;
+
+            System.Windows.Size size = new System.Windows.Size(canvas.Width, canvas.Height);
+
+            canvas.Measure(size);
+            canvas.Arrange(new Rect(size));
+
             RenderTargetBitmap renderBitmap = new RenderTargetBitmap(
-             (int)canvas.Width, (int)canvas.Height,
-             96d, 96d, PixelFormats.Pbgra32);
-            // needed otherwise the image output is black
-            canvas.Measure(new Size((int)canvas.Width, (int)canvas.Height));
-            canvas.Arrange(new Rect(new Size((int)canvas.Width, (int)canvas.Height)));
+    (int)b.Width, (int)b.Height,
+    96, 96, PixelFormats.Pbgra32);
 
             renderBitmap.Render(canvas);
 
@@ -113,6 +126,209 @@ namespace DrawOrPaint
             {
                 encoder.Save(file);
             }
+        }
+        public Bitmap SetBrightness(int brightness,Bitmap _currentBitmap)
+        {
+            Bitmap temp = (Bitmap)_currentBitmap;
+            Bitmap bmap = (Bitmap)temp.Clone();
+            if (brightness < -255) brightness = -255;
+            if (brightness > 255) brightness = 255;
+            System.Drawing.Color c;
+            for (int i = 0; i < bmap.Width; i++)
+            {
+                for (int j = 0; j < bmap.Height; j++)
+                {
+                    c = bmap.GetPixel(i, j);
+                    int cR = c.R + brightness;
+                    int cG = c.G + brightness;
+                    int cB = c.B + brightness;
+
+                    if (cR < 0) cR = 1;
+                    if (cR > 255) cR = 255;
+
+                    if (cG < 0) cG = 1;
+                    if (cG > 255) cG = 255;
+
+                    if (cB < 0) cB = 1;
+                    if (cB > 255) cB = 255;
+
+                    bmap.SetPixel(i, j, System.Drawing.Color.FromArgb((byte)cR, (byte)cG, (byte)cB));
+                }
+            }
+            return _currentBitmap = (Bitmap)bmap.Clone();
+        }
+
+        public Bitmap SetAddition(int value, Bitmap _currentBitmap)
+        {
+            Bitmap temp = (Bitmap)_currentBitmap;
+            Bitmap bmap = (Bitmap)temp.Clone();
+            if (value < -255) value = -255;
+            if (value > 255) value = 255;
+            System.Drawing.Color c;
+            for (int i = 0; i < bmap.Width; i++)
+            {
+                for (int j = 0; j < bmap.Height; j++)
+                {
+                    c = bmap.GetPixel(i, j);
+                    int cR = c.R + value;
+                    int cG = c.G + value;
+                    int cB = c.B + value;
+
+                    if (cR < 0) cR = 1;
+                    if (cR > 255) cR = 255;
+
+                    if (cG < 0) cG = 1;
+                    if (cG > 255) cG = 255;
+
+                    if (cB < 0) cB = 1;
+                    if (cB > 255) cB = 255;
+
+                    bmap.SetPixel(i, j, System.Drawing.Color.FromArgb((byte)cR, (byte)cG, (byte)cB));
+                }
+            }
+            return _currentBitmap = (Bitmap)bmap.Clone();
+        }
+
+        public Bitmap SetSubtraction(int value, Bitmap _currentBitmap)
+        {
+            Bitmap temp = (Bitmap)_currentBitmap;
+            Bitmap bmap = (Bitmap)temp.Clone();
+            if (value < -255) value = -255;
+            if (value > 255) value = 255;
+            System.Drawing.Color c;
+            for (int i = 0; i < bmap.Width; i++)
+            {
+                for (int j = 0; j < bmap.Height; j++)
+                {
+                    c = bmap.GetPixel(i, j);
+                    int cR = c.R - value;
+                    int cG = c.G - value;
+                    int cB = c.B - value;
+
+                    if (cR < 0) cR = 1;
+                    if (cR > 255) cR = 255;
+
+                    if (cG < 0) cG = 1;
+                    if (cG > 255) cG = 255;
+
+                    if (cB < 0) cB = 1;
+                    if (cB > 255) cB = 255;
+
+                    bmap.SetPixel(i, j, System.Drawing.Color.FromArgb((byte)cR, (byte)cG, (byte)cB));
+                }
+            }
+            return _currentBitmap = (Bitmap)bmap.Clone();
+        }
+
+        public Bitmap SetMultiplication(int value, Bitmap _currentBitmap)
+        {
+            Bitmap temp = (Bitmap)_currentBitmap;
+            Bitmap bmap = (Bitmap)temp.Clone();
+            if (value < -255) value = -255;
+            if (value > 255) value = 255;
+            System.Drawing.Color c;
+            for (int i = 0; i < bmap.Width; i++)
+            {
+                for (int j = 0; j < bmap.Height; j++)
+                {
+                    c = bmap.GetPixel(i, j);
+                    int cR = c.R * value;
+                    int cG = c.G * value;
+                    int cB = c.B * value;
+
+                    if (cR < 0) cR = 1;
+                    if (cR > 255) cR = 255;
+
+                    if (cG < 0) cG = 1;
+                    if (cG > 255) cG = 255;
+
+                    if (cB < 0) cB = 1;
+                    if (cB > 255) cB = 255;
+
+                    bmap.SetPixel(i, j, System.Drawing.Color.FromArgb((byte)cR, (byte)cG, (byte)cB));
+                }
+            }
+            return _currentBitmap = (Bitmap)bmap.Clone();
+        }
+
+        public Bitmap SetDivision(int value, Bitmap _currentBitmap)
+        {
+            Bitmap temp = (Bitmap)_currentBitmap;
+            Bitmap bmap = (Bitmap)temp.Clone();
+            if (value < 1) value = 1;
+            if (value > 255) value = 255;
+            System.Drawing.Color c;
+            for (int i = 0; i < bmap.Width; i++)
+            {
+                for (int j = 0; j < bmap.Height; j++)
+                {
+                    c = bmap.GetPixel(i, j);
+                    int cR = c.R / value;
+                    int cG = c.G / value;
+                    int cB = c.B / value;
+
+                    if (cR < 0) cR = 1;
+                    if (cR > 255) cR = 255;
+
+                    if (cG < 0) cG = 1;
+                    if (cG > 255) cG = 255;
+
+                    if (cB < 0) cB = 1;
+                    if (cB > 255) cB = 255;
+
+                    bmap.SetPixel(i, j, System.Drawing.Color.FromArgb((byte)cR, (byte)cG, (byte)cB));
+                }
+            }
+            return _currentBitmap = (Bitmap)bmap.Clone();
+        }
+
+        public Bitmap SetGrayscale(Bitmap _currentBitmap)
+        {
+            Bitmap temp = (Bitmap)_currentBitmap;
+            Bitmap bmap = (Bitmap)temp.Clone();
+            System.Drawing.Color c;
+            for (int i = 0; i < bmap.Width; i++)
+            {
+                for (int j = 0; j < bmap.Height; j++)
+                {
+                    c = bmap.GetPixel(i, j);
+                    byte gray = (byte)(.299 * c.R + .587 * c.G + .114 * c.B);
+
+                    bmap.SetPixel(i, j, System.Drawing.Color.FromArgb(gray, gray, gray));
+                }
+            }
+            return _currentBitmap = (Bitmap)bmap.Clone();
+        }
+
+        public Bitmap getBitmapFromCanvas()
+        {
+            Bitmap bmpCanvas;
+
+            Rect b = VisualTreeHelper.GetDescendantBounds(canvas);
+
+            Transform transform = canvas.LayoutTransform;
+
+            canvas.LayoutTransform = null;
+
+            System.Windows.Size size = new System.Windows.Size(canvas.Width, canvas.Height);
+
+            canvas.Measure(size);
+            canvas.Arrange(new Rect(size));
+
+            RenderTargetBitmap renderBitmap = new RenderTargetBitmap(
+    (int)b.Width, (int)b.Height,
+    96, 96, PixelFormats.Pbgra32);
+
+            renderBitmap.Render(canvas);
+            MemoryStream stream = new MemoryStream();
+
+            BitmapEncoder encoder = new BmpBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+            encoder.Save(stream);
+
+            bmpCanvas = new Bitmap(stream);
+
+            return bmpCanvas;
         }
     }
 }
