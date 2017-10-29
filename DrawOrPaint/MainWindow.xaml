@@ -179,6 +179,33 @@
                     </Button>
                 </Grid>
             </TabItem>
+            <TabItem Header="Efekty" Height="Auto">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Header="Image Filters" Grid.Column="0" Margin="5px">
+                    <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Button Content="Edge Detection" Name="EdgeDetection_Btn" Grid.Column="0" Grid.Row="0" Margin="5px" Click="ApplayFilter"/>
+                            <Button Content="Gaussian Blur" Name="GaussianBlur_Btn" Grid.Column="0" Grid.Row="1" Margin="5px" Click="ApplayFilter"/>
+                            <Button Content="Soften" Name="Soften_Btn" Grid.Column="1" Grid.Row="0" Margin="5px" Click="ApplayFilter"/>
+                            <Button Content="High Pass" Name="HighPass_Btn" Grid.Column="1" Grid.Row="1" Margin="5px"  Click="ApplayFilter"/>
+                            <Button Content="Median" Name="Median_Btn" Grid.Column="2" Grid.Row="0" Margin="5px" Click="ApplayFilter"/>
+                        </Grid>
+                </GroupBox>
+                </Grid>
+            </TabItem>
         </TabControl>
 
         <Grid Grid.Row="2">

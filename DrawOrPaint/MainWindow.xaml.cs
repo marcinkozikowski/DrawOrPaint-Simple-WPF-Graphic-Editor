@@ -1,4 +1,5 @@
 ﻿using DrawOrPaint.Tools;
+using ImageConvolutionFilters;
 using Microsoft.Win32;
 using System;
 using System.IO;
@@ -598,6 +599,69 @@ namespace DrawOrPaint
         }
         #endregion
 
+
+        private void ApplayFilter(object sender, RoutedEventArgs e)
+        {
+            Button pickedFilter = sender as Button;
+            RenderTargetBitmap renderBitmap = new RenderTargetBitmap(
+             (int)main_canvas.Width, (int)main_canvas.Height,
+             96d, 96d, PixelFormats.Pbgra32);
+            // needed otherwise the image output is black
+            main_canvas.Measure(new Size((int)main_canvas.Width, (int)main_canvas.Height));
+            main_canvas.Arrange(new Rect(new Size((int)main_canvas.Width, (int)main_canvas.Height)));
+
+            renderBitmap.Render(main_canvas);
+            MemoryStream stream = new MemoryStream();
+            BitmapEncoder encoder = new BmpBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+            encoder.Save(stream);
+
+            System.Drawing.Bitmap bitmapCanvas = new System.Drawing.Bitmap(stream);
+            System.Drawing.Bitmap afterFilter;
+            Image MyImg = new Image();
+            IntPtr hBitmap;
+            FilterBase filter;
+
+            switch (pickedFilter.Name)
+            {
+                case "EdgeDetection_Btn":
+                    filter = new EdgeDetectionFilter();
+                    afterFilter = bitmapCanvas.ConvolutionFilter(filter);
+                    main_canvas.Children.Clear();
+                    hBitmap = afterFilter.GetHbitmap();
+                    MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                    main_canvas.Children.Add(MyImg);
+                    break;
+                case "GaussianBlur_Btn":
+                    filter = new Gaussian3x3BlurFilter();
+                    afterFilter = bitmapCanvas.ConvolutionFilter(filter);
+                    main_canvas.Children.Clear();
+                    hBitmap = afterFilter.GetHbitmap();
+                    MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                    main_canvas.Children.Add(MyImg);
+                    break;
+                case "Soften_Btn":
+                    filter = new SoftenFilter();
+                    afterFilter = bitmapCanvas.ConvolutionFilter(filter);
+                    main_canvas.Children.Clear();
+                    hBitmap = afterFilter.GetHbitmap();
+                    MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                    main_canvas.Children.Add(MyImg);
+                    break;
+                case "HighPass_Btn":
+                    filter = new HighPass3x3Filter();
+                    afterFilter = bitmapCanvas.ConvolutionFilter(filter);
+                    main_canvas.Children.Clear();
+                    hBitmap = afterFilter.GetHbitmap();
+                    MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                    main_canvas.Children.Add(MyImg);
+                    break;
+                case "Median_Btn":
+                    break;
+                default:
+                    break;
+            }
+        }
 
         public void ShowException(string ex)
         {

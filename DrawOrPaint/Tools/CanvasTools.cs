@@ -41,6 +41,7 @@ namespace DrawOrPaint
             }
             canvas.Children.Add(shape);
         }
+
         public void RemoveShape(Shape shape)
         {
             canvas.Children.Remove(shape);

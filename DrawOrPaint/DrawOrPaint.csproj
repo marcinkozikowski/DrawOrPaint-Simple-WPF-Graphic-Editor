@@ -85,6 +85,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Filters\BlurFilter.cs" />
+    <Compile Include="Filters\EdgeDetectionFilter.cs" />
+    <Compile Include="Filters\HighPassFilter.cs" />
+    <Compile Include="Filters\SoftenFilter.cs" />
     <Compile Include="JpegQuality_Window.xaml.cs">
       <DependentUpon>JpegQuality_Window.xaml</DependentUpon>
     </Compile>
@@ -94,6 +98,8 @@
     <Compile Include="Tools\ColorPicker.xaml.cs">
       <DependentUpon>ColorPicker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tools\FilterBase.cs" />
+    <Compile Include="Tools\FilterBMP.cs" />
     <Compile Include="Tools\PixelMap.cs" />
     <Compile Include="Tools\PixelMap2.cs" />
     <Page Include="JpegQuality_Window.xaml">
