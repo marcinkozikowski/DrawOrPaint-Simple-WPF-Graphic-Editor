@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.ComponentModel;
 using DrawOrPaint.Filters;
+using AForge.Imaging.Filters;
 
 namespace DrawOrPaint
 {
@@ -41,6 +42,7 @@ namespace DrawOrPaint
         const double ScaleRate = 1.2;
         ScaleTransform currentZoom;
         private int brightnessValue;
+        private System.Drawing.Bitmap oryginalImage = null;
 
         public MainWindow()
         {
@@ -96,6 +98,19 @@ namespace DrawOrPaint
             set
             {
                 canvasTool = value;
+            }
+        }
+
+        public System.Drawing.Bitmap OryginalImage
+        {
+            get
+            {
+                return oryginalImage;
+            }
+
+            set
+            {
+                oryginalImage = value;
             }
         }
 
@@ -537,6 +552,7 @@ namespace DrawOrPaint
                 }
                 currentFileLabel.Content = "Res: "+PixelMap2.BmpWidth + "x" + PixelMap2.BmpHeight+"  Max Color Value: "+PixelMap2.BmpMaxVal;
                 currentFileNameLabel.Content = System.IO.Path.GetFileName(filename);
+                OryginalImage = null;
         }
 
         private void SaveMenuItem_Click(object sender, RoutedEventArgs e)
@@ -781,6 +797,33 @@ namespace DrawOrPaint
             Histogram_Window h = new Histogram_Window();
             h.Show();
         }
+
+        private void SetBinarizationDegree_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            System.Drawing.Bitmap image;
+            if (OryginalImage == null)
+            {
+                OryginalImage = canvasTool.getBitmapFromCanvas();
+                
+            }
+                image = OryginalImage;
+
+            IFilter threshold = new Threshold((int)binarizationValue_Slider.Value);
+            image = Grayscale.CommonAlgorithms.RMY.Apply(image);
+            image = threshold.Apply(image);
+
+            System.Windows.Controls.Image MyImg = new System.Windows.Controls.Image();
+            IntPtr hBitmap;
+
+            hBitmap = image.GetHbitmap();
+            MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+
+            main_canvas.Children.Clear();
+            main_canvas.Children.Add(MyImg);
+            BinarizationValue_Label.Content = ((int)binarizationValue_Slider.Value).ToString();
+
+        }
+
         public void ShowException(string ex)
         {
             string message = ex;

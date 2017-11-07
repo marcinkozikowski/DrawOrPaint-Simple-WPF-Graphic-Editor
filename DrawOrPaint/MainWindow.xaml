@@ -171,6 +171,20 @@
                     <Button Grid.Column="0" Grid.Row="0" Click="ShowHistogram_Click">
                         <TextBlock>Histogram</TextBlock>
                     </Button>
+                    <GroupBox Header="Binarization" Grid.Column="1" Grid.Row="0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Label Name="BinarizationValue_Label" Grid.Column="1" Content="0"/>
+                            <Slider Grid.Column="0" Grid.Row="0" Maximum="255" Minimum="0" Name="binarizationValue_Slider" ValueChanged="SetBinarizationDegree_ValueChanged"/>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Efekty" Height="Auto">
