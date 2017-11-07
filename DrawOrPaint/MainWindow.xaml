@@ -228,7 +228,7 @@
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="Brightness Value" Grid.Row="0" VerticalContentAlignment="Center"/>
                         <Label Grid.Column="1" Grid.Row="0" Name="BrightnesValueTextBox" Content="0" VerticalContentAlignment="Center"/>
-                        <Slider Name="BrightnessSlider" Minimum="-255" Maximum="255" TickFrequency="1" Grid.Row="1" Grid.ColumnSpan="2" ValueChanged="BrightnessValue_Changed"/>
+                            <Slider Name="BrightnessSlider" Minimum="-255" Maximum="255" TickFrequency="1" Grid.Row="1" Grid.ColumnSpan="2"  ValueChanged="BrightnessValue_Changed" PreviewMouseUp="BrightnessValue_Changed"/>
                         <Button Name="Brightness" Grid.Row="2" Content="Set Brightness" Click="ChangeImageBrightness" Margin="5px" Grid.ColumnSpan="2"/>
                     </Grid>
                     </GroupBox>

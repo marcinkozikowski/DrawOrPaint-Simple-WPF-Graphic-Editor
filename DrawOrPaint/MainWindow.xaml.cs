@@ -727,6 +727,29 @@ namespace DrawOrPaint
             BrightnessValue = value;
         }
 
+        private void BrightnessValue_Changed(object sender, MouseButtonEventArgs e)
+        {
+            if (OryginalImage == null)
+            {
+                OryginalImage = canvasTool.getBitmapFromCanvas();
+            }
+            int value = (int)Math.Round(BrightnessSlider.Value, 0);
+            BrightnesValueTextBox.Content = value.ToString();
+            BrightnessValue = value;
+
+            System.Windows.Controls.Image MyImg = new System.Windows.Controls.Image();
+            IntPtr hBitmap;
+
+            System.Drawing.Bitmap bitmap = OryginalImage;
+            bitmap = CanvasTool.SetBrightness(BrightnessValue, bitmap);
+
+            hBitmap = bitmap.GetHbitmap();
+            MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+
+            main_canvas.Children.Clear();
+            main_canvas.Children.Add(MyImg);
+        }
+
         private void SetPointTransformation(object sender, RoutedEventArgs e)
         {
             System.Windows.Controls.Image MyImg = new System.Windows.Controls.Image();
@@ -761,17 +784,21 @@ namespace DrawOrPaint
 
         private void ChangeImageBrightness(object sender, RoutedEventArgs e)
         {
-            System.Windows.Controls.Image MyImg = new System.Windows.Controls.Image();
-            IntPtr hBitmap;
+            if(OryginalImage!=null)
+            {
+                System.Windows.Controls.Image MyImg = new System.Windows.Controls.Image();
+                IntPtr hBitmap;
 
-            System.Drawing.Bitmap bitmap = CanvasTool.getBitmapFromCanvas();
-            bitmap = CanvasTool.SetBrightness(BrightnessValue, bitmap);
+                System.Drawing.Bitmap bitmap = CanvasTool.getBitmapFromCanvas();
+                //bitmap = CanvasTool.SetBrightness(BrightnessValue, bitmap);
 
-            hBitmap = bitmap.GetHbitmap();
-            MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                hBitmap = bitmap.GetHbitmap();
+                MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
 
-            main_canvas.Children.Clear();
-            main_canvas.Children.Add(MyImg);
+                main_canvas.Children.Clear();
+                main_canvas.Children.Add(MyImg);
+                OryginalImage = null;
+            }
         }
 
         private void SetGrayscale_Click(object sender, RoutedEventArgs e)
