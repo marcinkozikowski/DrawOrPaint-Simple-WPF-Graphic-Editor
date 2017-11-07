@@ -76,6 +76,7 @@
     <Compile Include="Filters\BlurFilter.cs" />
     <Compile Include="Filters\EdgeDetectionFilter.cs" />
     <Compile Include="Filters\HighPassFilter.cs" />
+    <Compile Include="Filters\MedianFilter.cs" />
     <Compile Include="Filters\SoftenFilter.cs" />
     <Compile Include="Histogram_Window.xaml.cs">
       <DependentUpon>Histogram_Window.xaml</DependentUpon>

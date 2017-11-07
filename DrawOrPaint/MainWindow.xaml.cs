@@ -12,6 +12,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using DrawOrPaint.Filters;
 
 namespace DrawOrPaint
 {
@@ -49,6 +50,25 @@ namespace DrawOrPaint
             fillColor = Colors.Black;
             penThickness = 5;
             currentZoom = new ScaleTransform();
+            //Point1 = "70,130" Point2 = "220,20" Point3 = "180,160"
+            //BezierSegment curve = new BezierSegment(new Point(70, 130), new Point(320, 200), new Point(180, 416), true);
+
+            //// Set up the Path to insert the segments
+            //PathGeometry path = new PathGeometry();
+
+            //PathFigure pathFigure = new PathFigure();
+            //pathFigure.StartPoint = new Point(20, 20);
+            //pathFigure.IsClosed = false;
+            //path.Figures.Add(pathFigure);
+
+
+            //pathFigure.Segments.Add(curve);
+            
+            //System.Windows.Shapes.Path p = new System.Windows.Shapes.Path();
+            //p.Stroke = Brushes.Red;
+            //p.Data = path;
+
+            //main_canvas.Children.Add(p); // H
         }
 
         Color buttonBackground = Color.FromRgb(System.Convert.ToByte(221), System.Convert.ToByte(221), System.Convert.ToByte(221));
@@ -174,8 +194,7 @@ namespace DrawOrPaint
         }
 
         private void main_canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            
+        {   
             mDown = e.GetPosition(this.main_canvas);
             capture = true;
 
@@ -674,6 +693,11 @@ namespace DrawOrPaint
                     main_canvas.Children.Add(MyImg);
                     break;
                 case "Median_Btn":
+                    afterFilter = MedianFilter.CalculateMedianFilter(bitmapCanvas, 3, 0, false);
+                    hBitmap = afterFilter.GetHbitmap();
+                    MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                    main_canvas.Children.Clear();
+                    main_canvas.Children.Add(MyImg);
                     break;
                 default:
                     break;

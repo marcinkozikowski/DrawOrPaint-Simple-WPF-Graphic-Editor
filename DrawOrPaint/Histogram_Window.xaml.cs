@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace DrawOrPaint
     {
         private PointCollection luminanceHistogramPoints = null;
         public event PropertyChangedEventHandler PropertyChanged;
-        private CanvasTools canvasTool;
+        private CanvasTools canvasTool = new CanvasTools(((MainWindow)System.Windows.Application.Current.MainWindow).main_canvas);
 
         public PointCollection LuminanceHistogramPoints
         {
@@ -44,20 +45,20 @@ namespace DrawOrPaint
             }
         }
 
+        public PointCollection calculateHistogram(Bitmap image)
+        {
+            ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(image);
+            this.LuminanceHistogramPoints = canvasTool.ConvertToPointCollection(hslStatistics.Luminance.Values);
+
+            return LuminanceHistogramPoints;
+        }
+
+
         public Histogram_Window()
         {
             InitializeComponent();
-            canvasTool = new CanvasTools(((MainWindow)System.Windows.Application.Current.MainWindow).main_canvas);
-            // Luminance
-            ImageStatisticsHSL hslStatistics = new ImageStatisticsHSL(canvasTool.getBitmapFromCanvas());
-            this.LuminanceHistogramPoints = canvasTool.ConvertToPointCollection(hslStatistics.Luminance.Values);
-
+            calculateHistogram(canvasTool.getBitmapFromCanvas());
             histoPolygon.Points = LuminanceHistogramPoints;
-            // RGB
-            //ImageStatistics rgbStatistics = new ImageStatistics(bmp);
-            //this.RedColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Red.Values);
-            //this.GreenColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Green.Values);
-            //this.BlueColorHistogramPoints = ConvertToPointCollection(rgbStatistics.Blue.Values);
         }
     }
 }
