@@ -283,7 +283,7 @@ namespace DrawOrPaint
             return _currentBitmap = (Bitmap)bmap.Clone();
         }
 
-        public Bitmap SetGrayscale(Bitmap _currentBitmap)
+        public Bitmap SetGrayscaleLuminosity(Bitmap _currentBitmap)
         {
             Bitmap temp = (Bitmap)_currentBitmap;
             Bitmap bmap = (Bitmap)temp.Clone();
@@ -294,6 +294,24 @@ namespace DrawOrPaint
                 {
                     c = bmap.GetPixel(i, j);
                     byte gray = (byte)(.299 * c.R + .587 * c.G + .114 * c.B);
+
+                    bmap.SetPixel(i, j, System.Drawing.Color.FromArgb(gray, gray, gray));
+                }
+            }
+            return _currentBitmap = (Bitmap)bmap.Clone();
+        }
+
+        public Bitmap SetGrayscaleAverage(Bitmap _currentBitmap)
+        {
+            Bitmap temp = (Bitmap)_currentBitmap;
+            Bitmap bmap = (Bitmap)temp.Clone();
+            System.Drawing.Color c;
+            for (int i = 0; i < bmap.Width; i++)
+            {
+                for (int j = 0; j < bmap.Height; j++)
+                {
+                    c = bmap.GetPixel(i, j);
+                    byte gray = (byte)((c.R + c.G + c.B)/3);
 
                     bmap.SetPixel(i, j, System.Drawing.Color.FromArgb(gray, gray, gray));
                 }

@@ -778,10 +778,15 @@ namespace DrawOrPaint
         {
             System.Windows.Controls.Image MyImg = new System.Windows.Controls.Image();
             IntPtr hBitmap;
-
             System.Drawing.Bitmap bitmap = CanvasTool.getBitmapFromCanvas();
-            bitmap = CanvasTool.SetGrayscale(bitmap);
-
+            if (((Button)e.Source).Name=="Average")
+            {
+                bitmap = CanvasTool.SetGrayscaleAverage(bitmap);
+            }
+            else
+            {
+                bitmap = CanvasTool.SetGrayscaleLuminosity(bitmap);
+            }
             hBitmap = bitmap.GetHbitmap();
             MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
 
