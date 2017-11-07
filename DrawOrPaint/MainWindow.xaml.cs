@@ -1,4 +1,5 @@
-﻿using DrawOrPaint.Tools;
+﻿using AForge.Imaging;
+using DrawOrPaint.Tools;
 using ImageConvolutionFilters;
 using Microsoft.Win32;
 using System;
@@ -10,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
 namespace DrawOrPaint
 {
@@ -42,7 +44,7 @@ namespace DrawOrPaint
         public MainWindow()
         {
             InitializeComponent();
-            canvasTool = new CanvasTools(main_canvas);
+            CanvasTool = new CanvasTools(main_canvas);
             penColor = Colors.Black;
             fillColor = Colors.Black;
             penThickness = 5;
@@ -61,6 +63,19 @@ namespace DrawOrPaint
             set
             {
                 brightnessValue = value;
+            }
+        }
+
+        internal CanvasTools CanvasTool
+        {
+            get
+            {
+                return canvasTool;
+            }
+
+            set
+            {
+                canvasTool = value;
             }
         }
 
@@ -203,14 +218,14 @@ namespace DrawOrPaint
             capture = false;
             if (currentShape != null)
             {
-                if (canvasTool.drawType == DrawType.ellipse || canvasTool.drawType == DrawType.rectangle)
+                if (CanvasTool.drawType == DrawType.ellipse || CanvasTool.drawType == DrawType.rectangle)
                 {
                     Shape temp = null;
-                    if (canvasTool.drawType == DrawType.ellipse)
+                    if (CanvasTool.drawType == DrawType.ellipse)
                     {
                         temp = new Ellipse();
                     }
-                    else if (canvasTool.drawType == DrawType.rectangle)
+                    else if (CanvasTool.drawType == DrawType.rectangle)
                     {
                         temp = new Rectangle();
                     }
@@ -222,12 +237,12 @@ namespace DrawOrPaint
                     temp.Height = currentShape.Height;
                     Canvas.SetLeft(temp, currentShape.Margin.Left);
                     Canvas.SetTop(temp, currentShape.Margin.Top);
-                    canvasTool.DrawShape(temp, true);
+                    CanvasTool.DrawShape(temp, true);
                 }
 
                 currentShape = null;
             }
-            else if (canvasTool.drawType == DrawType.line && currentLine != null)
+            else if (CanvasTool.drawType == DrawType.line && currentLine != null)
             {
 
                 Line line = new Line();
@@ -250,7 +265,7 @@ namespace DrawOrPaint
                 Canvas.SetLeft(line, currentLine.Margin.Left);
                 Canvas.SetTop(line, currentLine.Margin.Right);
 
-                canvasTool.DrawShape(line, true);
+                CanvasTool.DrawShape(line, true);
             }
             currentLine = null;
         }
@@ -389,16 +404,16 @@ namespace DrawOrPaint
 
             mMove = e.GetPosition(this.main_canvas);
             addShape = false;
-            if ((canvasTool.drawType == DrawType.ellipse || canvasTool.drawType == DrawType.rectangle) && capture)
+            if ((CanvasTool.drawType == DrawType.ellipse || CanvasTool.drawType == DrawType.rectangle) && capture)
             {
 
                 if (currentShape == null)
                 {
-                    if (canvasTool.drawType == DrawType.ellipse)
+                    if (CanvasTool.drawType == DrawType.ellipse)
                     {
                         currentShape = new Ellipse();
                     }
-                    else if (canvasTool.drawType == DrawType.rectangle)
+                    else if (CanvasTool.drawType == DrawType.rectangle)
                     {
                         currentShape = new Rectangle();
                     }
@@ -430,10 +445,10 @@ namespace DrawOrPaint
 
                 if (addShape)
                 {
-                    canvasTool.DrawCapture(currentShape);
+                    CanvasTool.DrawCapture(currentShape);
                 }
             }
-            else if (canvasTool.drawType == DrawType.line && capture)
+            else if (CanvasTool.drawType == DrawType.line && capture)
             {
                 if (currentLine == null)
                 {
@@ -449,7 +464,7 @@ namespace DrawOrPaint
 
                 if (addShape)
                 {
-                    canvasTool.DrawCapture(currentLine);
+                    CanvasTool.DrawCapture(currentLine);
                 }
             }
             #endregion
@@ -457,7 +472,7 @@ namespace DrawOrPaint
 
         private void main_canvas_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (canvasTool.drawType == DrawType.nothing)
+            if (CanvasTool.drawType == DrawType.nothing)
             {
                 if (e.Source != main_canvas && e.Source.GetType() == typeof(Rectangle) || e.Source.GetType() == typeof(Ellipse) || e.Source.GetType() == typeof(Line))
                 {
@@ -498,7 +513,7 @@ namespace DrawOrPaint
                 if (openFileDialog.ShowDialog() == true)
                 {
                     filename = openFileDialog.FileName;
-                    canvasTool.OpenNewImageFile(filename);
+                    CanvasTool.OpenNewImageFile(filename);
 
                 }
                 currentFileLabel.Content = "Res: "+PixelMap2.BmpWidth + "x" + PixelMap2.BmpHeight+"  Max Color Value: "+PixelMap2.BmpMaxVal;
@@ -544,13 +559,13 @@ namespace DrawOrPaint
 
         private void SaveDimensBtn_Click(object sender, RoutedEventArgs e)
         {
-            if ((canvasTool.drawType == DrawType.rectangle || canvasTool.drawType == DrawType.ellipse) && (HeightTextBox.Text != "" && WidthTextBox.Text != ""))
+            if ((CanvasTool.drawType == DrawType.rectangle || CanvasTool.drawType == DrawType.ellipse) && (HeightTextBox.Text != "" && WidthTextBox.Text != ""))
             {
-                if (canvasTool.drawType == DrawType.rectangle)
+                if (CanvasTool.drawType == DrawType.rectangle)
                 {
                     currentShape = new Rectangle();
                 }
-                else if (canvasTool.drawType == DrawType.ellipse)
+                else if (CanvasTool.drawType == DrawType.ellipse)
                 {
                     currentShape = new Ellipse();
                 }
@@ -566,11 +581,11 @@ namespace DrawOrPaint
                 currentShape.Height = height;
                 currentShape.Stroke = new SolidColorBrush(penColor);
                 currentShape.StrokeThickness = penThickness;
-                canvasTool.DrawShape(currentShape, false);
+                CanvasTool.DrawShape(currentShape, false);
                 currentShape = null;
 
             }
-            else if (selectedShape != null && canvasTool.drawType == DrawType.nothing)
+            else if (selectedShape != null && CanvasTool.drawType == DrawType.nothing)
             {
                 double width = 0;
                 double height = 0;
@@ -584,8 +599,8 @@ namespace DrawOrPaint
                 selectedShape.Stroke = new SolidColorBrush(penColor);
                 selectedShape.StrokeThickness = penThickness;
 
-                canvasTool.RemoveShape(selectedShape);
-                canvasTool.DrawShape(selectedShape, false);
+                CanvasTool.RemoveShape(selectedShape);
+                CanvasTool.DrawShape(selectedShape, false);
                 selectedShape = null;
             }
         }
@@ -617,10 +632,10 @@ namespace DrawOrPaint
             Button pickedFilter = sender as Button;
 
 
-            System.Drawing.Bitmap bitmapCanvas = canvasTool.getBitmapFromCanvas();
+            System.Drawing.Bitmap bitmapCanvas = CanvasTool.getBitmapFromCanvas();
             System.Drawing.Bitmap afterFilter;
 
-            Image MyImg = new Image();
+            System.Windows.Controls.Image MyImg = new System.Windows.Controls.Image();
             IntPtr hBitmap;
             FilterBase filter;
 
@@ -677,24 +692,24 @@ namespace DrawOrPaint
             System.Windows.Controls.Image MyImg = new System.Windows.Controls.Image();
             IntPtr hBitmap;
 
-            System.Drawing.Bitmap bitmap = canvasTool.getBitmapFromCanvas();
+            System.Drawing.Bitmap bitmap = CanvasTool.getBitmapFromCanvas();
             int value = int.Parse(PointTransformationValue.Text.ToString());
 
             if (Addition.IsChecked==true)
             {
-                bitmap = canvasTool.SetAddition(value, bitmap);
+                bitmap = CanvasTool.SetAddition(value, bitmap);
             }
             else if(Subtraction.IsChecked==true)
             {
-                bitmap = canvasTool.SetSubtraction(value, bitmap);
+                bitmap = CanvasTool.SetSubtraction(value, bitmap);
             }
             else if(Division.IsChecked==true)
             {
-                bitmap = canvasTool.SetDivision(value, bitmap);
+                bitmap = CanvasTool.SetDivision(value, bitmap);
             }
             else if(Multiplication.IsChecked==true)
             {
-                bitmap = canvasTool.SetMultiplication(value, bitmap);
+                bitmap = CanvasTool.SetMultiplication(value, bitmap);
             }
 
             hBitmap = bitmap.GetHbitmap();
@@ -709,8 +724,8 @@ namespace DrawOrPaint
             System.Windows.Controls.Image MyImg = new System.Windows.Controls.Image();
             IntPtr hBitmap;
 
-            System.Drawing.Bitmap bitmap = canvasTool.getBitmapFromCanvas();
-            bitmap = canvasTool.SetBrightness(BrightnessValue, bitmap);
+            System.Drawing.Bitmap bitmap = CanvasTool.getBitmapFromCanvas();
+            bitmap = CanvasTool.SetBrightness(BrightnessValue, bitmap);
 
             hBitmap = bitmap.GetHbitmap();
             MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
@@ -724,8 +739,8 @@ namespace DrawOrPaint
             System.Windows.Controls.Image MyImg = new System.Windows.Controls.Image();
             IntPtr hBitmap;
 
-            System.Drawing.Bitmap bitmap = canvasTool.getBitmapFromCanvas();
-            bitmap = canvasTool.SetGrayscale(bitmap);
+            System.Drawing.Bitmap bitmap = CanvasTool.getBitmapFromCanvas();
+            bitmap = CanvasTool.SetGrayscale(bitmap);
 
             hBitmap = bitmap.GetHbitmap();
             MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
@@ -737,6 +752,11 @@ namespace DrawOrPaint
         #endregion
 
 
+        private void ShowHistogram_Click(object sender, RoutedEventArgs e)
+        {
+            Histogram_Window h = new Histogram_Window();
+            h.Show();
+        }
         public void ShowException(string ex)
         {
             string message = ex;
@@ -756,33 +776,33 @@ namespace DrawOrPaint
             if (buttonText.Equals("LineBtn"))
             {
                 LineBtn.Background = new SolidColorBrush(Colors.DarkGray);
-                canvasTool.drawType = DrawType.line;
+                CanvasTool.drawType = DrawType.line;
                 main_canvas.Cursor = Cursors.Cross;
                 currentToolLabel.Content = "Line";
             }
             else if (buttonText.Equals("CircleBtn"))
             {
                 CircleBtn.Background = new SolidColorBrush(Colors.DarkGray);
-                canvasTool.drawType = DrawType.ellipse;
+                CanvasTool.drawType = DrawType.ellipse;
                 main_canvas.Cursor = Cursors.Cross;
                 currentToolLabel.Content = "Circle";
             }
             else if (buttonText.Equals("ArrowBtn"))
             {
                 ArrowBtn.Background = new SolidColorBrush(Colors.DarkGray);
-                canvasTool.drawType = DrawType.nothing;
+                CanvasTool.drawType = DrawType.nothing;
                 main_canvas.Cursor = Cursors.Arrow;
                 currentToolLabel.Content = "Cursor";
             }
             else if (buttonText.Equals("RectangleBtn"))
             {
                 RectangleBtn.Background = new SolidColorBrush(Colors.DarkGray);
-                canvasTool.drawType = DrawType.rectangle;
+                CanvasTool.drawType = DrawType.rectangle;
                 main_canvas.Cursor = Cursors.Cross;
                 currentToolLabel.Content = "Rectangle";
             }
             else
-                canvasTool.drawType = DrawType.nothing;
+                CanvasTool.drawType = DrawType.nothing;
         }
     }
 }

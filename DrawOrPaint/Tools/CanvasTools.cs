@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Drawing.Drawing2D;
 using System.Drawing;
+using AForge.Imaging;
 
 namespace DrawOrPaint
 {
@@ -299,6 +300,52 @@ namespace DrawOrPaint
             }
             return _currentBitmap = (Bitmap)bmap.Clone();
         }
+
+        #region HistogramMethods
+
+        public PointCollection ConvertToPointCollection(int[] values)
+        {
+            //if (this.PerformHistogramSmoothing)
+            //{
+            //    values = SmoothHistogram(values);
+            //}
+
+            int max = values.Max();
+
+            PointCollection points = new PointCollection();
+            // first point (lower-left corner)
+            points.Add(new System.Windows.Point(0, max));
+            // middle points
+            for (int i = 0; i < values.Length; i++)
+            {
+                points.Add(new System.Windows.Point(i, max - values[i]));
+            }
+            // last point (lower-right corner)
+            points.Add(new System.Windows.Point(values.Length - 1, max));
+
+            return points;
+        }
+
+        public int[] SmoothHistogram(int[] originalValues)
+        {
+            int[] smoothedValues = new int[originalValues.Length];
+
+            double[] mask = new double[] { 0.25, 0.5, 0.25 };
+
+            for (int bin = 1; bin < originalValues.Length - 1; bin++)
+            {
+                double smoothedValue = 0;
+                for (int i = 0; i < mask.Length; i++)
+                {
+                    smoothedValue += originalValues[bin - 1 + i] * mask[i];
+                }
+                smoothedValues[bin] = (int)smoothedValue;
+            }
+
+            return smoothedValues;
+        }
+
+        #endregion
 
         public Bitmap getBitmapFromCanvas()
         {
