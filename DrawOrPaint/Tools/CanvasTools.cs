@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using System.Drawing.Drawing2D;
 using System.Drawing;
 using AForge.Imaging;
+using AForge.Imaging.Filters;
 
 namespace DrawOrPaint
 {
@@ -128,6 +129,7 @@ namespace DrawOrPaint
                 encoder.Save(file);
             }
         }
+
         public Bitmap SetBrightness(int brightness,Bitmap _currentBitmap)
         {
             Bitmap temp = (Bitmap)_currentBitmap;
@@ -188,6 +190,18 @@ namespace DrawOrPaint
                 }
             }
             return _currentBitmap = (Bitmap)bmap.Clone();
+        }
+
+        public void SetBmpImageToCanvas(Bitmap image)
+        {
+            System.Windows.Controls.Image MyImg = new System.Windows.Controls.Image();
+            IntPtr hBitmap;
+
+            hBitmap = image.GetHbitmap();
+            MyImg.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+
+            canvas.Children.Clear();
+            canvas.Children.Add(MyImg);
         }
 
         public Bitmap SetSubtraction(int value, Bitmap _currentBitmap)
@@ -317,6 +331,64 @@ namespace DrawOrPaint
                 }
             }
             return _currentBitmap = (Bitmap)bmap.Clone();
+        }
+
+        public Bitmap Equalize(Bitmap bmp) 
+        {
+            HistogramEqualization filter = new HistogramEqualization();
+            // process image
+            filter.ApplyInPlace(bmp);
+
+           
+            return bmp;
+        }
+
+        public Bitmap HistogramEqualiztion(Bitmap image)
+        {
+            Bitmap bmp = image;
+            long[] GrHst = new long[256]; long HstValue = 0;
+            long[] GrSum = new long[256]; long SumValue = 0;
+            for (int row = 0; row < bmp.Height; row++)
+                for (int col = 0; col < bmp.Width; col++)
+                {
+                    HstValue = (long)(255 * bmp.GetPixel(col, row).GetBrightness());
+                    GrHst[HstValue]++;
+                }
+            for (int level = 0; level < 255; level++)
+            {
+                SumValue += GrHst[level];
+                GrSum[level] = SumValue;
+            }
+            for (int row = 0; row < bmp.Height; row++)
+                for (int col = 0; col < bmp.Width; col++)
+                {
+                    System.Drawing.Color clr = bmp.GetPixel(col, row);
+                    HstValue = (long)(255 * clr.GetBrightness());
+                    HstValue = (long)(255f / (bmp.Width * bmp.Height) * GrSum[HstValue] - HstValue);
+                    int R = (int)Math.Min(255, clr.R + HstValue / 3); //.299
+                    int G = (int)Math.Min(255, clr.G + HstValue / 3); //.587
+                    int B = (int)Math.Min(255, clr.B + HstValue / 3); //.112
+                    bmp.SetPixel(col, row, System.Drawing.Color.FromArgb(Math.Max(R, 0), Math.Max(G, 0), Math.Max(B, 0)));
+                }
+            return bmp;
+        }
+
+        public Bitmap HistogramStretch(Bitmap image)
+        {
+            ContrastStretch filter = new ContrastStretch();
+            // process image
+            Bitmap bmp = image;
+            filter.ApplyInPlace(image);
+            return bmp;
+        }
+
+        public Bitmap MeanInterativSelectionBinarization(Bitmap image)
+        {
+            // create filter
+            IterativeThreshold filter = new IterativeThreshold(2, 128);
+            // apply the filter
+            Bitmap newImage = filter.Apply(image);
+            return newImage;
         }
 
         #region HistogramMethods

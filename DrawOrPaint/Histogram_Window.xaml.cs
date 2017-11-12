@@ -17,9 +17,6 @@ using System.Windows.Shapes;
 
 namespace DrawOrPaint
 {
-    /// <summary>
-    /// Interaction logic for Histogram_Window.xaml
-    /// </summary>
     public partial class Histogram_Window : Window, INotifyPropertyChanged
     {
         private PointCollection luminanceHistogramPoints = null;
@@ -57,6 +54,22 @@ namespace DrawOrPaint
         public Histogram_Window()
         {
             InitializeComponent();
+            calculateHistogram(canvasTool.getBitmapFromCanvas());
+            histoPolygon.Points = LuminanceHistogramPoints;
+        }
+
+        private void HistogramEqualization_Click(object sender, RoutedEventArgs e)
+        {
+            Bitmap bmp = canvasTool.Equalize(canvasTool.getBitmapFromCanvas());
+            canvasTool.SetBmpImageToCanvas(bmp);
+            calculateHistogram(canvasTool.getBitmapFromCanvas());
+            histoPolygon.Points = LuminanceHistogramPoints;
+        }
+
+        private void HistogramStretch_Click(object sender, RoutedEventArgs e)
+        {
+            Bitmap bmp = canvasTool.HistogramStretch(canvasTool.getBitmapFromCanvas());
+            canvasTool.SetBmpImageToCanvas(bmp);
             calculateHistogram(canvasTool.getBitmapFromCanvas());
             histoPolygon.Points = LuminanceHistogramPoints;
         }

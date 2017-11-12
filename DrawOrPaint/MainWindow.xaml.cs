@@ -838,7 +838,7 @@ namespace DrawOrPaint
                 OryginalImage = canvasTool.getBitmapFromCanvas();
                 
             }
-                image = OryginalImage;
+            image = OryginalImage;
 
             IFilter threshold = new Threshold((int)binarizationValue_Slider.Value);
             image = Grayscale.CommonAlgorithms.RMY.Apply(image);
