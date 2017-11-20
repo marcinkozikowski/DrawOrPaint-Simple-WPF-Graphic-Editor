@@ -856,6 +856,19 @@ namespace DrawOrPaint
 
         }
 
+        private void OtsuThreshold_Click(object sender, RoutedEventArgs e)
+        {
+            System.Drawing.Bitmap temp = canvasTool.getBitmapFromCanvas();
+            temp = Grayscale.CommonAlgorithms.RMY.Apply(temp);
+            OtsuThreshold filter = new OtsuThreshold();
+            // apply the filter
+            filter.ApplyInPlace(temp);
+            // check threshold value
+            int t = filter.ThresholdValue;
+            canvasTool.SetBmpImageToCanvas(temp);
+            MessageBox.Show("OtsuThreshold Calculated Vaule: " + t, "ThresholdValue", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
         public void ShowException(string ex)
         {
             string message = ex;

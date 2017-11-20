@@ -382,6 +382,7 @@ namespace DrawOrPaint
             return bmp;
         }
 
+        //TODO: podpiac ta funkcje do slidera gdzie bedzie ustawialo sie prog binaryzacji, blad chyba mozna ustawic programowo
         public Bitmap MeanInterativSelectionBinarization(Bitmap image)
         {
             // create filter

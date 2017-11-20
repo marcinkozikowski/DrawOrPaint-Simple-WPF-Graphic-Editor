@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -92,6 +93,7 @@
     </Compile>
     <Compile Include="Tools\FilterBase.cs" />
     <Compile Include="Tools\FilterBMP.cs" />
+    <Compile Include="Tools\Otsu.cs" />
     <Compile Include="Tools\PixelMap.cs" />
     <Compile Include="Tools\PixelMap2.cs" />
     <Page Include="Histogram_Window.xaml">

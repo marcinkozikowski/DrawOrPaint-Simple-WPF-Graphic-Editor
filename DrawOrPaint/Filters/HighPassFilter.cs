@@ -1,9 +1,4 @@
-﻿/*
- * The Following Code was developed by Dewald Esterhuizen
- * View Documentation at: http://softwarebydefault.com
- * Licensed under Ms-PL 
-*/
-using DrawOrPaint.Tools;
+﻿using DrawOrPaint.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;

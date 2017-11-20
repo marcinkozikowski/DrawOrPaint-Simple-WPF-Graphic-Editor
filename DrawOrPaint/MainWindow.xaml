@@ -166,7 +166,7 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Button Grid.Column="0" Grid.Row="0" Click="ShowHistogram_Click">
                         <TextBlock>Histogram</TextBlock>
@@ -180,9 +180,11 @@
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
+                                <RowDefinition/>
                             </Grid.RowDefinitions>
                             <Label Name="BinarizationValue_Label" Grid.Column="1" Content="0"/>
                             <Slider Grid.Column="0" Grid.Row="0" Maximum="255" Minimum="0" Name="binarizationValue_Slider" ValueChanged="SetBinarizationDegree_ValueChanged"/>
+                            <Button Grid.Column="0" Grid.Row="1" Content="OtsuThreshold Auto" Click="OtsuThreshold_Click"/>
                         </Grid>
                     </GroupBox>
                 </Grid>
