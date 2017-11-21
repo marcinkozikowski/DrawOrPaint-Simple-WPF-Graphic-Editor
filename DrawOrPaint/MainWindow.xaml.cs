@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.ComponentModel;
 using DrawOrPaint.Filters;
-using AForge.Imaging.Filters;
+using Accord.Imaging.Filters;
 
 namespace DrawOrPaint
 {
@@ -867,6 +867,22 @@ namespace DrawOrPaint
             int t = filter.ThresholdValue;
             canvasTool.SetBmpImageToCanvas(temp);
             MessageBox.Show("OtsuThreshold Calculated Vaule: " + t, "ThresholdValue", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void NiblackThreshold_Click(object sender, RoutedEventArgs e)
+        {
+            var niblack = new NiblackThreshold();
+            System.Drawing.Bitmap gray = Grayscale.CommonAlgorithms.RMY.Apply(canvasTool.getBitmapFromCanvas());
+            System.Drawing.Bitmap resault = niblack.Apply(gray);
+            canvasTool.SetBmpImageToCanvas(resault);
+        }
+
+        private void SauvolaThreshold_Click(object sender, RoutedEventArgs e)
+        {
+            var sauvola = new SauvolaThreshold();
+            System.Drawing.Bitmap gray = Grayscale.CommonAlgorithms.RMY.Apply(canvasTool.getBitmapFromCanvas());
+            System.Drawing.Bitmap resault = sauvola.Apply(gray);
+            canvasTool.SetBmpImageToCanvas(resault);
         }
 
         public void ShowException(string ex)

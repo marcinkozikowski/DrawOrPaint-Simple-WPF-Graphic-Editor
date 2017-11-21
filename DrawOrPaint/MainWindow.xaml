@@ -184,7 +184,9 @@
                             </Grid.RowDefinitions>
                             <Label Name="BinarizationValue_Label" Grid.Column="1" Content="0"/>
                             <Slider Grid.Column="0" Grid.Row="0" Maximum="255" Minimum="0" Name="binarizationValue_Slider" ValueChanged="SetBinarizationDegree_ValueChanged"/>
-                            <Button Grid.Column="0" Grid.Row="1" Content="OtsuThreshold Auto" Click="OtsuThreshold_Click"/>
+                            <Button Grid.Column="1" Grid.Row="1" Content="OtsuThreshold Auto" Click="OtsuThreshold_Click"/>
+                            <Button Grid.Column="1" Grid.Row="0" Content="Niblack Threshold" Click="NiblackThreshold_Click"/>
+                            <!--<Button Grid.Column="1" Grid.Row="1" Content="Sauvola Threshold" Click="SauvolaThreshold_Click"/>-->
                         </Grid>
                     </GroupBox>
                 </Grid>
