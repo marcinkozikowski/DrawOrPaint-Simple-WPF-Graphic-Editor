@@ -101,7 +101,6 @@
     <Compile Include="Filters\HighPassFilter.cs" />
     <Compile Include="Filters\MedianFilter.cs" />
     <Compile Include="Filters\NiblacksThreshold.cs" />
-    <Compile Include="Filters\SauvolasThreshold.cs" />
     <Compile Include="Filters\SoftenFilter.cs" />
     <Compile Include="Histogram_Window.xaml.cs">
       <DependentUpon>Histogram_Window.xaml</DependentUpon>
@@ -117,7 +116,7 @@
     </Compile>
     <Compile Include="Tools\FilterBase.cs" />
     <Compile Include="Tools\FilterBMP.cs" />
-    <Compile Include="Tools\Otsu.cs" />
+    <Compile Include="Filters\Otsu.cs" />
     <Compile Include="Tools\PixelMap.cs" />
     <Compile Include="Tools\PixelMap2.cs" />
     <Page Include="Histogram_Window.xaml">
